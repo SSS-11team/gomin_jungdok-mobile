@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:go_router/go_router.dart';
 
 class Navigation_bar extends StatelessWidget {
   final int currentIndex;
@@ -15,68 +16,36 @@ class Navigation_bar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.white,
       iconSize: 20.0,
       unselectedFontSize: 12.0,
       selectedFontSize: 12.0,
       currentIndex: currentIndex,
       selectedItemColor: Color(0xFFFA743E),
       unselectedItemColor: Colors.grey,
-      onTap: onTabSelected,
+      onTap: (index) {
+        onTabSelected(index);
+      },
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Icon(Icons.home),
-              SizedBox(height: 5), // 아이콘과 라벨 사이 간격 조정
-            ],
-          ),
+          icon: Icon(Icons.home),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Icon(FontAwesomeIcons.fire),
-              SizedBox(height: 5), // 아이콘과 라벨 사이 간격 조정
-            ],
-          ),
+          icon: Icon(FontAwesomeIcons.fire),
           label: '오늘의고민',
         ),
         BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Icon((Icons.add)),
-              SizedBox(height: 5), // 아이콘과 라벨 사이 간격 조정
-            ],
-          ),
+          icon: Icon(Icons.add),
           label: '고민등록하기',
         ),
         BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Icon((LucideIcons.bookOpen)),
-              SizedBox(height: 5), // 아이콘과 라벨 사이 간격 조정
-            ],
-          ),
+          icon: Icon(LucideIcons.bookOpen),
           label: '과거의고민',
         ),
         BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Icon(Icons.person),
-              SizedBox(height: 5), // 아이콘과 라벨 사이 간격 조정
-            ],
-          ),
+          icon: Icon(Icons.person),
           label: '마이페이지',
         ),
       ],

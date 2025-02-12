@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WorryRegist extends StatelessWidget {
-  const WorryRegist({super.key});
+class AiWorry extends StatelessWidget {
+  const AiWorry({super.key});
 
   @override
   Widget build(BuildContext context) {
