@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gomin_jungdok_mobile/navigation_bar.dart';
 import 'package:gomin_jungdok_mobile/worry/pastWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/todayWorry.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/myProfile.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/normal_worry.dart';
 
 class Mainview extends StatefulWidget {
   const Mainview({super.key});

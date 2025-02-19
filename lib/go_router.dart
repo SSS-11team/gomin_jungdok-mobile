@@ -95,25 +95,36 @@ void _showPopupMenu(BuildContext context) async {
     context: context,
     position: RelativeRect.fromLTRB(
       overlay.size.width / 2 - 86,
-      overlay.size.height - 120,
+      overlay.size.height - 220,
       overlay.size.width / 2 + 86,
       0,
     ),
-    items: [
-      const PopupMenuItem<String>(
-        value: 'general',
-        child: Center(child: Text('일반 고민 작성', style: TextStyle(fontSize: 16))),
-      ),
-      const PopupMenuDivider(),
-      const PopupMenuItem<String>(
-        value: 'ai',
-        child: Center(child: Text('AI 고민 작성', style: TextStyle(fontSize: 16))),
-      ),
-    ],
     elevation: 8.0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
     ),
+    color: Colors.white,
+    items: [
+      const PopupMenuItem<String>(
+        value: 'general',
+        child: Center(
+          child: Text(
+            '일반 고민 작성',
+            style: TextStyle(fontSize: 16, color: Colors.black),
+          ),
+        ),
+      ),
+      const PopupMenuDivider(),
+      const PopupMenuItem<String>(
+        value: 'ai',
+        child: Center(
+          child: Text(
+            'AI 고민 작성',
+            style: TextStyle(fontSize: 16, color: Colors.black),
+          ),
+        ),
+      ),
+    ],
   ).then((String? value) {
     if (value == 'general') {
       context.go('/normalWorry'); // 고민등록하기 페이지로 이동

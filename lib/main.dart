@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gomin_jungdok_mobile/common/go_router.dart';
+import 'package:gomin_jungdok_mobile/go_router.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/mainView.dart';
+import 'package:gomin_jungdok_mobile/worryRegist/tooltip_screen.dart';
 
 void main() {
   runApp(const MyApp());

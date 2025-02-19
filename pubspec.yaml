@@ -38,6 +38,7 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   go_router: ^14.8.0
   image_picker: ^1.1.2
+  keyboard_avoider: ^0.2.0
 
 dev_dependencies:
   flutter_test:
