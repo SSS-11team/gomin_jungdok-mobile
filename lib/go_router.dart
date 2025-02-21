@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/pastWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/todayWorry.dart';
+import 'package:gomin_jungdok_mobile/worryRegist/ai_analyze.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/mainView.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/myProfile.dart';
@@ -46,6 +47,10 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/myProfile',
           builder: (context, state) => MyProfile(),
+        ),
+        GoRoute(
+          path: '/aiWorry_analyze',
+          builder: (context, state) => AiAnalyze(),
         ),
       ],
     ),
