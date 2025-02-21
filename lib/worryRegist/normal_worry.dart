@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gomin_jungdok_mobile/common/const/apiUrl.dart';
 import 'package:gomin_jungdok_mobile/worryRegist/tooltip_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -18,6 +22,11 @@ class _NormalWorryState extends State<NormalWorry> {
     TextEditingController(),
   ];
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
+  final List<XFile> _selectedImages = [];
+  final ImagePicker _picker = ImagePicker();
+
+  final Dio _dio = Dio(); // 서버와의 통신을 위함!
+  final String apiUrl = apiURL;
 
   @override
   void initState() {
@@ -37,6 +46,13 @@ class _NormalWorryState extends State<NormalWorry> {
         });
       });
     }
+  }
+
+  void _updateImages(List<XFile> newImages) {
+    setState(() {
+      _selectedImages.clear();
+      _selectedImages.addAll(newImages);
+    });
   }
 
   @override
@@ -96,7 +112,10 @@ class _NormalWorryState extends State<NormalWorry> {
                       CustomTitleField(),
                       CustomIntroField(controller: _introController),
                       BubbleWidget(comment: "필요에 따라 설명에 사진을 추가할 수 있어요"),
-                      ImagePickerWidget(),
+                      ImagePickerWidget(
+                        selectedImages: _selectedImages,
+                        onImageSelected: _updateImages,
+                      ),
                       SizedBox(
                         height: 25,
                       ),
@@ -113,7 +132,7 @@ class _NormalWorryState extends State<NormalWorry> {
                       ),
                       SizedBox(height: 30),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _submitWorry,
                         child: Center(child: Text('등록하기')),
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(double.infinity, 50),
@@ -133,6 +152,57 @@ class _NormalWorryState extends State<NormalWorry> {
         ],
       ),
     );
+  }
+
+  Future<void> _submitWorry() async {
+    if (_introController.text.isEmpty ||
+        _choiceControllers[0].text.isEmpty ||
+        _choiceControllers[1].text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("제목, 설명, 선택지를 모두 입력해주세요.")),
+      );
+      return;
+    }
+
+    try {
+      FormData formData = FormData.fromMap({
+        "title": _introController.text, // 제목
+        "description": _introController.text, // 고민 설명
+        "option1": _choiceControllers[0].text, // 첫 번째 선택지
+        "option2": _choiceControllers[1].text, // 두 번째 선택지
+        "images": [
+          for (var image in _selectedImages)
+            await MultipartFile.fromFile(image.path, filename: image.name),
+        ]
+      });
+
+      Response response = await _dio.post(
+        "$apiUrl/api/post",
+        data: formData,
+        options: Options(
+          headers: {"Content-Type": "multipart/form-data"},
+        ),
+      );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("고민글 작성 완료! 🎉")),
+        );
+
+        // 입력 필드 초기화
+        setState(() {
+          _introController.clear();
+          _choiceControllers.forEach((controller) => controller.clear());
+          _selectedImages.clear();
+        });
+      } else {
+        throw Exception("고민글 작성 실패: ${response.statusMessage}");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("오류 발생: $e")),
+      );
+    }
   }
 
   Widget _buildChoiceField(String label, int index) {
@@ -361,37 +431,30 @@ class _CustomIntroFieldState extends State<CustomIntroField> {
   }
 }
 
-class ImagePickerWidget extends StatefulWidget {
-  @override
-  _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
-}
+class ImagePickerWidget extends StatelessWidget {
+  final List<XFile> selectedImages;
+  final Function(List<XFile>) onImageSelected;
 
-class _ImagePickerWidgetState extends State<ImagePickerWidget> {
+  ImagePickerWidget(
+      {required this.selectedImages, required this.onImageSelected});
+
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> _selectedImages = [];
 
-  // 갤러리에서 이미지 선택
-  Future<void> _pickImages() async {
+  Future<void> _pickImages(BuildContext context) async {
     final List<XFile>? images = await _picker.pickMultiImage();
-
     if (images != null) {
-      setState(() {
-        // 최대 4개까지만 추가 가능하도록 제한
-        if (_selectedImages.length + images.length <= 4) {
-          _selectedImages.addAll(images);
-        } else {
-          int spaceLeft = 4 - _selectedImages.length;
-          _selectedImages.addAll(images.take(spaceLeft));
-        }
-      });
+      if (selectedImages.length + images.length > 4) {
+        int spaceLeft = 4 - selectedImages.length;
+        onImageSelected([...selectedImages, ...images.take(spaceLeft)]);
+      } else {
+        onImageSelected([...selectedImages, ...images]);
+      }
     }
   }
 
-  // 이미지 삭제
   void _removeImage(int index) {
-    setState(() {
-      _selectedImages.removeAt(index);
-    });
+    List<XFile> updatedList = List.from(selectedImages)..removeAt(index);
+    onImageSelected(updatedList);
   }
 
   @override
@@ -399,7 +462,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     return Row(
       children: [
         GestureDetector(
-          onTap: _pickImages,
+          onTap: () => _pickImages(context),
           child: Container(
             width: 60,
             height: 60,
@@ -414,7 +477,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 Icon(Icons.camera_alt, size: 24, color: Colors.grey),
                 Text.rich(TextSpan(children: [
                   TextSpan(
-                    text: "${_selectedImages.length}",
+                    text: "${selectedImages.length}",
                     style: TextStyle(
                       color: Color(0xFFFA743E),
                       fontSize: 12,
@@ -431,16 +494,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
           ),
         ),
-        SizedBox(
-          width: 10,
-        ),
+        SizedBox(width: 10),
 
         // 선택한 이미지 리스트
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _selectedImages.asMap().entries.map((entry) {
+              children: selectedImages.asMap().entries.map((entry) {
                 int index = entry.key;
                 XFile image = entry.value;
                 return Stack(
@@ -448,8 +509,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        image.path,
+                      child: Image.file(
+                        File(image.path), // ✅ Image.asset 대신 Image.file 사용
                         width: 60,
                         height: 60,
                         fit: BoxFit.cover,
@@ -468,7 +529,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ],
                 );
               }).toList(),
-              spacing: 10,
             ),
           ),
         ),
