@@ -6,7 +6,7 @@ part 'apiResponse_model.g.dart';
 class ApiResponse<T> {
   final int statusCode;
   final String message;
-  final T data;
+  final T? data;
 
   ApiResponse(
       {required this.statusCode, required this.message, required this.data});
