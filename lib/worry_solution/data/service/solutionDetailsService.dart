@@ -13,10 +13,24 @@ class Solutiondetailsservice {
 
     debugPrint("[PRINT_SOLUTION_DETAILS] : ${response.data.toString()}");
     if (response.statusCode != 200) {
-      print("[ERROR] failed to fetch solutionDetails");
+      print(
+          "[ERROR] failed to fetch solutionDetails - errorCode : ${response.statusCode}");
     }
 
     solutionDetailsModel = response.data!;
     return solutionDetailsModel;
+  }
+
+  Future<SolutionVote> voteSolution(
+      int postId, Map<String, dynamic> vote) async {
+    final SolutionVote solutionVoteModel;
+    final response = await repository.solutionVote(id: postId, vote: vote);
+    debugPrint(response.statusCode.toString());
+    if (response.statusCode != 201) {
+      print(
+          "[ERROR] Failed to vote solution - errorCode : ${response.statusCode}");
+    }
+    solutionVoteModel = response.data!;
+    return solutionVoteModel;
   }
 }
