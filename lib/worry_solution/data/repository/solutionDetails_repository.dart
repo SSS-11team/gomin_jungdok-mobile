@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:gomin_jungdok_mobile/common/dio/apiResponse_model.dart';
 import 'package:gomin_jungdok_mobile/common/dio/const.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/model/solutionDetails_model.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/model/solutionVote_model.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionVote_model.dart';
+
 import 'package:retrofit/retrofit.dart';
 
 part 'solutionDetails_repository.g.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionVote_model.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/repository/solutionDetails_repository.dart';
 
 class Solutiondetailsservice {
