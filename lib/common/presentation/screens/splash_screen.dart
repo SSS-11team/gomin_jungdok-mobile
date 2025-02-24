@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gomin_jungdok_mobile/common/component/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MAIN_COLOR,
       body: Center(
         child: Column(
           children: [
@@ -24,6 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
             SvgPicture.asset(
               'assets/icons/logoTypo.svg',
               height: size.width * 0.5,
+              // color: Colors.white,
+              colorFilter:
+                  const ColorFilter.mode(MAIN_BG_COLOR, BlendMode.srcIn),
             ),
           ],
         ),
