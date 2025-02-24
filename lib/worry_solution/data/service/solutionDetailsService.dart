@@ -3,16 +3,18 @@ import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_m
 import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionVote_model.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/repository/solutionDetails_repository.dart';
 
-class Solutiondetailsservice {
-  final SolutiondetailsRepository repository;
-  SolutionDetails solutionDetailsModel;
-  Solutiondetailsservice(this.repository, this.solutionDetailsModel);
+class SolutionDetailsService {
+  final SolutionDetailsRepository repository;
+
+  SolutionDetailsService(this.repository);
 
   Future<SolutionDetails> fetchSolutionDetails(int postId) async {
+    SolutionDetails solutionDetailsModel;
     final response = await repository.fetchDetailsSolutionPosts(id: postId);
 
     debugPrint("[PRINT_SOLUTION_DETAILS] : ${response.data.toString()}");
-    if (response.statusCode != 200) {
+    print("response SOlution Details : ${response.data}");
+    if (response.statusCode != 200 || response.statusCode != 201) {
       print(
           "[ERROR] failed to fetch solutionDetails - errorCode : ${response.statusCode}");
     }

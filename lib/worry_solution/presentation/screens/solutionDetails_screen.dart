@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/presentation/widget/selectionButton_widget.dart';
 
 class SolutionDetailsView extends StatefulWidget {
@@ -9,6 +10,7 @@ class SolutionDetailsView extends StatefulWidget {
 }
 
 class _SolutionDetailsViewState extends State<SolutionDetailsView> {
+  late SolutionDetails solutionDetails;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
