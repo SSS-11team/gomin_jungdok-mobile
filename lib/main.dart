@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/view/solutionDetails_view.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       home: const SolutionDetailsView(),
     );
   }

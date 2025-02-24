@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/component/widget/selectionButton_widget.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/presentation/widget/selectionButton_widget.dart';
 
 class SolutionDetailsView extends StatefulWidget {
   const SolutionDetailsView({super.key});
@@ -83,6 +83,7 @@ class _SolutionDetailsViewState extends State<SolutionDetailsView> {
               children: [
                 Expanded(
                   child: SelectionButton(label: '선택지1'),
+                  // 누르면 색상 변화하도록 구현
                 ),
                 const SizedBox(width: 10),
                 Expanded(
