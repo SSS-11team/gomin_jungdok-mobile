@@ -4,29 +4,36 @@ part 'solutionDetails_model.g.dart';
 
 @JsonSerializable()
 class SolutionDetails {
-  final bool isvoted;
+  final bool isVoted;
   final bool isMine;
-  final bool isScrap;
   final bool isAi;
+  final String? profileImage;
+  final String writerNickname;
+  final String createdAt;
   final String title;
   final String description;
-  // 일단 String으로 구현했는데 이미지라 추가적인 상의 필요
-  final List<String>? images;
+  final Map<String, dynamic>? images;
   final String option1Content;
   final String option2Content;
+  final int option1Vote;
+  final int option2Vote;
   final String? option1Percentage;
   final String? option2Percentage;
 
   SolutionDetails(
-      {required this.isvoted,
+      {required this.isVoted,
       required this.isMine,
-      required this.isScrap,
       required this.isAi,
+      this.profileImage,
+      required this.writerNickname,
+      required this.createdAt,
       required this.title,
       required this.description,
       this.images,
       required this.option1Content,
       required this.option2Content,
+      required this.option1Vote,
+      required this.option2Vote,
       this.option1Percentage,
       this.option2Percentage});
 
