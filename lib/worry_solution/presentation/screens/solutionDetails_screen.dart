@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gomin_jungdok_mobile/common/component/colors.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/presentation/widget/selectionButton_widget.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/provider/solutionDetails_prov.dart';
 
@@ -12,17 +13,18 @@ class SolutionDetailsView extends ConsumerWidget {
     final solutionDetailsAsync = ref.watch(fetchDetailProvider(postId));
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: MAIN_BG_COLOR,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: MAIN_BG_COLOR,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.grey),
+            icon: const Icon(Icons.arrow_back, color: MAIN_TEXT_COLOR),
             onPressed: () {},
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.report_gmailerrorred, color: Colors.grey),
+              icon: const Icon(Icons.report_gmailerrorred,
+                  color: MAIN_TEXT_COLOR),
               onPressed: () {},
             ),
           ],
@@ -41,7 +43,7 @@ class SolutionDetailsView extends ConsumerWidget {
                         children: [
                           const CircleAvatar(
                             radius: 20,
-                            backgroundColor: Colors.grey,
+                            backgroundColor: MAIN_TEXT_COLOR,
                           ),
                           const SizedBox(width: 10),
                           Column(
@@ -51,13 +53,13 @@ class SolutionDetailsView extends ConsumerWidget {
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               Text(info.createdAt,
-                                  style: TextStyle(color: Colors.grey)),
+                                  style: TextStyle(color: MAIN_TEXT_COLOR)),
                             ],
                           ),
                         ],
                       ),
                       Text(info.isAi.toString(),
-                          style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(color: MAIN_TEXT_COLOR)),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -65,7 +67,8 @@ class SolutionDetailsView extends ConsumerWidget {
                     info.title,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(info.description, style: TextStyle(color: Colors.grey)),
+                  Text(info.description,
+                      style: TextStyle(color: MAIN_TEXT_COLOR)),
                   const SizedBox(height: 16),
                   Container(
                     height: 150,
@@ -92,7 +95,7 @@ class SolutionDetailsView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   const Divider(
-                    color: Colors.grey,
+                    color: MAIN_TEXT_COLOR,
                     thickness: 1.0,
                     height: 1.0,
                   ),
@@ -106,8 +109,6 @@ class SolutionDetailsView extends ConsumerWidget {
                           voteCount: info.option1Vote,
                           votePercentage: info.option1Percentage!,
                         ),
-
-                        // 누르면 색상 변화하도록 구현
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -132,8 +133,9 @@ class SolutionDetailsView extends ConsumerWidget {
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.orange,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: MAIN_COLOR,
+          unselectedItemColor: MAIN_TEXT_COLOR,
+          backgroundColor: MAIN_BG_COLOR,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
             BottomNavigationBarItem(
