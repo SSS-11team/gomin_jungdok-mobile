@@ -8,9 +8,9 @@ part of 'solutionDetails_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
-class _SolutiondetailsRepository implements SolutiondetailsRepository {
-  _SolutiondetailsRepository(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://34.47.92.139:8080/post';
+class _SolutionDetailsRepository implements SolutionDetailsRepository {
+  _SolutionDetailsRepository(this._dio, {this.baseUrl, this.errorLogger}) {
+    baseUrl ??= 'http://34.47.92.139:8080/api/post';
   }
 
   final Dio _dio;

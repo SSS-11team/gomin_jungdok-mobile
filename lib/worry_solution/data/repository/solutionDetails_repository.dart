@@ -8,10 +8,10 @@ import 'package:retrofit/retrofit.dart';
 
 part 'solutionDetails_repository.g.dart';
 
-@RestApi(baseUrl: "$BASE_URI/post")
-abstract class SolutiondetailsRepository {
-  factory SolutiondetailsRepository(Dio dio, {String baseUrl}) =
-      _SolutiondetailsRepository;
+@RestApi(baseUrl: "$BASE_URI/api/post")
+abstract class SolutionDetailsRepository {
+  factory SolutionDetailsRepository(Dio dio, {String baseUrl}) =
+      _SolutionDetailsRepository;
 
   @GET('/{id}')
   Future<ApiResponse<SolutionDetails>> fetchDetailsSolutionPosts({
