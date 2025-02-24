@@ -41,6 +41,7 @@ dependencies:
   dio: ^5.8.0+1
   retrofit_generator: ^9.1.9
   flutter_svg: ^2.0.17
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:

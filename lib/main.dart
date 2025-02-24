@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/screens/splash_screen.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
 void main() {
   runApp(const MyApp());
