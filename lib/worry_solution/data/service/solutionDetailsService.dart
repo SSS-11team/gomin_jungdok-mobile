@@ -12,10 +12,8 @@ class SolutionDetailsService {
     SolutionDetails solutionDetailsModel;
     final response = await repository.fetchDetailsSolutionPosts(id: postId);
 
-    debugPrint("[PRINT_SOLUTION_DETAILS] : ${response.data.toString()}");
-    print("response SOlution Details : ${response.data}");
-    if (response.statusCode != 200 || response.statusCode != 201) {
-      print(
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      debugPrint(
           "[ERROR] failed to fetch solutionDetails - errorCode : ${response.statusCode}");
     }
 

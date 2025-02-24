@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 
 class SelectionButton extends StatelessWidget {
   final String label;
-  const SelectionButton({super.key, required this.label});
+  final int voteCount;
+  final String votePercentage;
+  const SelectionButton(
+      {super.key,
+      required this.label,
+      required this.voteCount,
+      required this.votePercentage});
 
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
@@ -54,7 +60,17 @@ class SelectionButton extends StatelessWidget {
           borderRadius: BorderRadius.zero,
         ),
       ),
-      child: Text(label, style: const TextStyle(color: Colors.black)),
+      child: Column(
+        children: [
+          Text(label,
+              style: const TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(voteCount.toString()), Text("($votePercentage)")],
+          ),
+        ],
+      ),
     );
   }
 }

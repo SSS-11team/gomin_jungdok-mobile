@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gomin_jungdok_mobile/common/component/colors.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/presentation/screens/solutionDetails_screen.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/presentation/screens/temp.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
         () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => SolutionDetailsViews(
+                builder: (context) => SolutionDetailsView(
                       postId: 1,
                     ))));
   }
