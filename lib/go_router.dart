@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/pastWorry.dart';
@@ -50,7 +52,16 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: '/aiWorry_analyze',
-          builder: (context, state) => AiAnalyze(),
+          builder: (context, state) {
+            final selectedImage = state.extra as File?; // 🛠 null 가능성 고려
+
+            if (selectedImage == null) {
+              // 🔥 예외 처리: 선택된 이미지가 없으면 이전 화면으로 이동
+              return const AiWorry();
+            }
+
+            return AiAnalyze(selectedImage: selectedImage);
+          },
         ),
       ],
     ),

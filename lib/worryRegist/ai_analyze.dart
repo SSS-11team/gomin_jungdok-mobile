@@ -1,47 +1,114 @@
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gomin_jungdok_mobile/common/const/apiUrl.dart';
 
 class AiAnalyze extends StatefulWidget {
-  const AiAnalyze({super.key});
+  final File selectedImage; // ✅ 전달받은 이미지
+
+  const AiAnalyze({super.key, required this.selectedImage});
 
   @override
   _AiAnalyzeState createState() => _AiAnalyzeState();
 }
 
 class _AiAnalyzeState extends State<AiAnalyze> {
-  int? _selectedTitleIndex; // 선택한 고민 제목 index
+  int? _selectedTitleIndex;
+  List<String> _recommendedTitles = ["AI 분석을 진행해주세요", "", ""];
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _analyzeImage(); // ✅ 페이지 열리자마자 AI 분석 실행
+  }
+
+  // AI 분석 요청 (이미지를 서버로 전송)
+  Future<void> _analyzeImage() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      Dio dio = Dio();
+      FormData formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(widget.selectedImage.path),
+      });
+
+      Response response = await dio.post(
+        "$apiURL/api/tensorFlowModel",
+        data: formData,
+        options: Options(headers: {"Content-Type": "multipart/form-data"}),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        List<String> fetchedTitles = List<String>.from(
+            response.data["message"]); // ✅ "message" 키에서 값 가져오기
+
+        setState(() {
+          _recommendedTitles = fetchedTitles.isNotEmpty
+              ? fetchedTitles
+              : ["추천 제목 없음", "추천 제목 없음", "추천 제목 없음"];
+        });
+      } else {
+        throw Exception("AI 추천 제목 불러오기 실패");
+      }
+    } catch (e) {
+      setState(() {
+        _recommendedTitles = ["불러오기 실패", "불러오기 실패", "불러오기 실패"];
+      });
+      print("❌ AI 추천 제목 불러오기 오류: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          color: Colors.white,
-          child: SafeArea(
-            child: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  context.go('/aiWorry');
-                },
-              ),
-            ),
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            context.go('/aiWorry');
+          },
         ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(thickness: 1, color: Colors.grey),
-          SizedBox(
-            height: 80,
+          Center(
+            child: widget.selectedImage != null
+                ? Image.file(widget.selectedImage,
+                    width: 150, height: 150, fit: BoxFit.cover)
+                : const Text("선택된 이미지 없음"),
           ),
 
-          // 📌 고민 제목 리스트 (AI 추천)
+          const SizedBox(height: 20),
+
+          // AI 분석 버튼
+          Center(
+            child: ElevatedButton(
+              onPressed: _isLoading ? null : _analyzeImage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFA743E),
+                foregroundColor: Colors.white,
+              ),
+              child: _isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text("AI 분석 다시 실행"),
+            ),
+          ),
+
+          const SizedBox(height: 40),
+
+          // AI 추천 제목 리스트
           Column(
             children: List.generate(3, (index) {
               final bool isSelected = _selectedTitleIndex == index;
@@ -49,140 +116,34 @@ class _AiAnalyzeState extends State<AiAnalyze> {
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    _selectedTitleIndex = index; // ✅ 리스트 전체 터치 시 선택 가능
+                    _selectedTitleIndex = index;
                   });
                 },
                 child: Container(
-                  width: double.infinity, // ✅ 가로 전체 차지
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFFFFF0EB)
-                        : Colors.transparent, // ✅ 선택된 항목 배경 확장
-                    border: Border(
-                      bottom: const BorderSide(
-                          color: Colors.grey, width: 1), // ✅ 아래 Divider 포함
-                    ),
+                        : Colors.transparent,
+                    border: const Border(
+                        bottom: BorderSide(color: Colors.grey, width: 1)),
                   ),
-                  child: Column(
-                    children: [
-                      // ✅ 첫 번째 항목인 경우, 위 Divider를 포함하여 배경과 자연스럽게 연결
-                      if (index == 0)
-                        const Divider(
-                          thickness: 1,
-                          color: Colors.grey,
-                          height: 0, // ✅ 불필요한 여백 제거
-                        ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20), // ✅ 내부 여백 추가
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "AI가 추천하는 제목 ${index + 1}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey.shade600,
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "고민제목이 표시됩니다",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: isSelected
-                                        ? const Color(0xFFFA743E)
-                                        : Colors.black,
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Radio<int>(
-                              value: index,
-                              groupValue: _selectedTitleIndex,
-                              activeColor: const Color(0xFFFA743E),
-                              onChanged: (int? value) {
-                                setState(() {
-                                  _selectedTitleIndex = value;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 20),
+                    child: Text(
+                      _recommendedTitles[index],
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: isSelected
+                              ? const Color(0xFFFA743E)
+                              : Colors.black),
+                    ),
                   ),
                 ),
               );
             }),
           ),
-
-          const Spacer(), // 버튼을 아래로 밀어주는 역할
-
-          // 📌 하단 버튼
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20), // ✅ 버튼 패딩 추가
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // 다시 추천 받기 버튼
-                SizedBox(
-                  width: 150,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedTitleIndex = null; // 선택 초기화
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      backgroundColor: Colors.grey.shade500,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('다시 추천 받기'),
-                  ),
-                ),
-
-                // 고민 작성하기 버튼
-                SizedBox(
-                  width: 150,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _selectedTitleIndex != null
-                        ? () {
-                            // TODO: 고민 작성하기 로직 추가
-                            print("고민 작성 화면으로 이동");
-                          }
-                        : null, // 선택 안하면 비활성화
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      backgroundColor: _selectedTitleIndex != null
-                          ? const Color(0xFFFA743E)
-                          : Colors.grey.shade300,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('고민 작성하기'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20), // 하단 여백 추가
         ],
       ),
     );
