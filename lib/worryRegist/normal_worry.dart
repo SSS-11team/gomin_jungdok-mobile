@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +13,7 @@ class NormalWorry extends StatefulWidget {
 }
 
 class _NormalWorryState extends State<NormalWorry> {
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
   int _introTextLength = 0;
   int _focusedChoiceIndex = -1; // 선택된 선택지 인덱스
@@ -73,24 +73,14 @@ class _NormalWorryState extends State<NormalWorry> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       // 선택지를 눌렀을때 appbar의 색상이 변하는
-      // 오류를 해결하는 extedBody-
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          color: Colors.white, // 🔥 AppBar 배경 고정
-          child: SafeArea(
-            child: AppBar(
-              backgroundColor:
-                  Colors.transparent, // 🔥 투명하게 해서 Container 색상을 유지
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  context.go('/');
-                },
-              ),
-            ),
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            context.go('/');
+          },
         ),
       ),
       body: Stack(
@@ -109,7 +99,7 @@ class _NormalWorryState extends State<NormalWorry> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTitleField(),
+                      CustomTitleField(controller: _titleController),
                       CustomIntroField(controller: _introController),
                       BubbleWidget(comment: "필요에 따라 설명에 사진을 추가할 수 있어요"),
                       ImagePickerWidget(
@@ -155,9 +145,15 @@ class _NormalWorryState extends State<NormalWorry> {
   }
 
   Future<void> _submitWorry() async {
-    if (_introController.text.isEmpty ||
-        _choiceControllers[0].text.isEmpty ||
-        _choiceControllers[1].text.isEmpty) {
+    FocusScope.of(context).unfocus();
+    debugPrint("✅ 제목: ${_titleController.text}");
+    debugPrint("✅ 설명: ${_introController.text}");
+    debugPrint("✅ 선택지1: ${_choiceControllers[0].text}");
+    debugPrint("✅ 선택지2: ${_choiceControllers[1].text}");
+    if (_titleController.text.trim().isEmpty ||
+        _introController.text.trim().isEmpty ||
+        _choiceControllers[0].text.trim().isEmpty ||
+        _choiceControllers[1].text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("제목, 설명, 선택지를 모두 입력해주세요.")),
       );
@@ -165,16 +161,25 @@ class _NormalWorryState extends State<NormalWorry> {
     }
 
     try {
+      List<MapEntry<String, MultipartFile>> imageFiles = [];
+      for (var image in _selectedImages) {
+        MultipartFile file =
+            await MultipartFile.fromFile(image.path, filename: image.name);
+        imageFiles.add(MapEntry("images", file)); // ✅ MapEntry로 변환
+      }
+
       FormData formData = FormData.fromMap({
-        "title": _introController.text, // 제목
-        "description": _introController.text, // 고민 설명
-        "option1": _choiceControllers[0].text, // 첫 번째 선택지
-        "option2": _choiceControllers[1].text, // 두 번째 선택지
-        "images": [
-          for (var image in _selectedImages)
-            await MultipartFile.fromFile(image.path, filename: image.name),
-        ]
+        "title": _introController.text.trim(), // 제목
+        "description": _introController.text.trim(), // 고민 설명
+        "option1": _choiceControllers[0].text.trim(), // 첫 번째 선택지
+        "option2": _choiceControllers[1].text.trim(), // 두 번째 선택지
       });
+
+      if (imageFiles.isNotEmpty) {
+        formData.files.addAll(
+          (imageFiles),
+        );
+      }
 
       Response response = await _dio.post(
         "$apiUrl/api/post",
@@ -184,25 +189,43 @@ class _NormalWorryState extends State<NormalWorry> {
         ),
       );
 
+      debugPrint("✅ 응답 코드: ${response.statusCode}");
+      debugPrint("✅ 응답 데이터: ${response.data}");
+
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("고민글 작성 완료! 🎉")),
         );
 
         // 입력 필드 초기화
-        setState(() {
-          _introController.clear();
-          _choiceControllers.forEach((controller) => controller.clear());
-          _selectedImages.clear();
-        });
+        _clearFields();
       } else {
         throw Exception("고민글 작성 실패: ${response.statusMessage}");
       }
     } catch (e) {
+      if (e is DioException) {
+        debugPrint("❌ DioException 발생!");
+        debugPrint("❌ 요청 URL: $apiUrl/api/post");
+        debugPrint("❌ 요청 데이터: ${e.requestOptions.data}");
+        debugPrint("❌ 응답 코드: ${e.response?.statusCode}");
+        debugPrint("❌ 응답 데이터: ${e.response?.data}");
+        debugPrint("❌ DioException 메시지: ${e.message}");
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("오류 발생: $e")),
+        SnackBar(content: Text("오류 발생: ${e.toString()}")),
       );
     }
+  }
+
+  void _clearFields() {
+    setState(() {
+      _titleController.clear();
+      _introController.clear();
+      for (var controller in _choiceControllers) {
+        controller.clear();
+      }
+      _selectedImages.clear();
+    });
   }
 
   Widget _buildChoiceField(String label, int index) {
@@ -268,13 +291,17 @@ class _NormalWorryState extends State<NormalWorry> {
 }
 
 class CustomTitleField extends StatefulWidget {
+  final TextEditingController controller; // 🔥 외부에서 컨트롤러를 받음
+
+  const CustomTitleField({required this.controller, Key? key})
+      : super(key: key);
+
   @override
   _CustomTitleFieldState createState() => _CustomTitleFieldState();
 }
 
 class _CustomTitleFieldState extends State<CustomTitleField> {
   bool _isFocused = false;
-  final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -290,7 +317,6 @@ class _CustomTitleFieldState extends State<CustomTitleField> {
   @override
   void dispose() {
     _focusNode.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
@@ -302,7 +328,7 @@ class _CustomTitleFieldState extends State<CustomTitleField> {
         const SizedBox(height: 5),
         TextField(
           focusNode: _focusNode,
-          controller: _controller,
+          controller: widget.controller, // 🔥 외부에서 받은 컨트롤러 사용
           maxLength: 20,
           decoration: InputDecoration(
             counterStyle: TextStyle(color: Color(0xFFFA743E), fontSize: 12),
