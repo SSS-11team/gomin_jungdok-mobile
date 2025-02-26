@@ -7,8 +7,8 @@ part of 'solutionVote_model.dart';
 // **************************************************************************
 
 SolutionVote _$SolutionVoteFromJson(Map<String, dynamic> json) => SolutionVote(
-      option1Percentage: json['option1Percentage'] as String?,
-      option2Percentage: json['option2Percentage'] as String?,
+      option1Percentage: (json['option1Percentage'] as num?)?.toDouble() ?? 0.0,
+      option2Percentage: (json['option2Percentage'] as num?)?.toDouble() ?? 0.0,
       voteOfOption1: (json['voteOfOption1'] as num?)?.toInt() ?? 0,
       voteOfOption2: (json['voteOfOption2'] as num?)?.toInt() ?? 0,
     );

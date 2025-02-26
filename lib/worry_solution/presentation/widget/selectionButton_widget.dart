@@ -43,11 +43,13 @@ class SelectionButton extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 ref
                     .read(selectedOptionProvider.notifier)
                     .seletedOption(optionNum);
-                service.voteSolution(1, {"vote": optionNum});
+                await service.voteSolution(1, {"vote": optionNum});
+                ref.invalidate(fetchDetailProvider(1));
+
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -84,9 +86,11 @@ class SelectionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(selectedOptionProvider);
     final isSelected = selectedOption == optionNum;
+    final isDisabled = selectedOption != null; // 이미 선택된 옵션이 있는지 확인
+
     return ElevatedButton(
       onPressed: () {
-        if (!isSelected) {
+        if (!isSelected && !isDisabled) {
           _showConfirmationDialog(context, ref);
         } else {
           _showAlreadyVotedDialog(context, ref);

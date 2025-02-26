@@ -23,11 +23,13 @@ class SolutionDetailsService {
       int postId, Map<String, dynamic> vote) async {
     final SolutionVote solutionVoteModel;
     final response = await repository.solutionVote(id: postId, vote: vote);
-    debugPrint(response.statusCode.toString());
+    debugPrint("[ERROR] Response error! :${response.statusCode.toString()}");
     if (response.statusCode != 201) {
       print(
           "[ERROR] Failed to vote solution - errorCode : ${response.statusCode}");
     }
+    print("====");
+    print(response.data!);
     solutionVoteModel = response.data!;
     return solutionVoteModel;
   }
