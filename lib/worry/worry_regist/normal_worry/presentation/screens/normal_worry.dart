@@ -470,12 +470,26 @@ class ImagePickerWidget extends StatelessWidget {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImages(BuildContext context) async {
-    final List<XFile> images = await _picker.pickMultiImage();
-    if (selectedImages.length + images.length > 4) {
-      int spaceLeft = 4 - selectedImages.length;
-      onImageSelected([...selectedImages, ...images.take(spaceLeft)]);
-    } else {
-      onImageSelected([...selectedImages, ...images]);
+    try {
+      final List<XFile>? images = await _picker.pickMultiImage();
+
+      if (images == null || images.isEmpty) {
+        print("이미지가 선택되지 않음.");
+        return;
+      }
+
+      List<XFile> validImages = images.where((image) {
+        return image.path.isNotEmpty && File(image.path).existsSync();
+      }).toList();
+
+      if (selectedImages.length + validImages.length > 4) {
+        int spaceLeft = 4 - selectedImages.length;
+        onImageSelected([...selectedImages, ...validImages.take(spaceLeft)]);
+      } else {
+        onImageSelected([...selectedImages, ...validImages]);
+      }
+    } catch (e) {
+      print("이미지 선택 중 오류 발생: $e");
     }
   }
 
@@ -536,12 +550,17 @@ class ImagePickerWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        File(image.path), // ✅ Image.asset 대신 Image.file 사용
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      ),
+                      child: File(image.path).existsSync()
+                          ? Image.file(
+                              File(image.path), // ✅ 경로 정리 후 Image.file 사용
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(Icons.error, size: 60),
+                            )
+                          : Icon(Icons.error,
+                              size: 60), // 파일이 존재하지 않으면 에러 아이콘 표시
                     ),
                     GestureDetector(
                       onTap: () => _removeImage(index),
