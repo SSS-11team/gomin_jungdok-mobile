@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:gomin_jungdok_mobile/common/dio/apiResponse_model.dart';
-import 'package:gomin_jungdok_mobile/common/dio/const.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionVote_model.dart';
+import 'package:gomin_jungdok_mobile/common/const/api.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/data/model/solutionDetails_model.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/data/model/solutionVote_model.dart';
 
 import 'package:retrofit/retrofit.dart';
 
 part 'solutionDetails_repository.g.dart';
 
-@RestApi(baseUrl: "$BASE_URI/api/post")
+@RestApi(baseUrl: "$BASE_URL/api/post")
 abstract class SolutionDetailsRepository {
   factory SolutionDetailsRepository(Dio dio, {String baseUrl}) =
       _SolutionDetailsRepository;

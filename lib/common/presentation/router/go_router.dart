@@ -1,34 +1,38 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gomin_jungdok_mobile/worry/pastWorry.dart';
-import 'package:gomin_jungdok_mobile/worry/todayWorry.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/ai_analyze.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/ai_worry.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/mainView.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/myProfile.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/normal_worry.dart';
+import 'package:gomin_jungdok_mobile/common/presentation/screens/splash_screen.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/widgets/navigation_bar.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorry.dart';
+import 'package:gomin_jungdok_mobile/worry/past_worry/presentation/screens/pastWorry.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_analyze.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_worry.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
+import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/splash', // 초기 경로를 스플래시로 설정
   routes: [
+    GoRoute(
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) {
         return Scaffold(
           body: child,
           bottomNavigationBar: Navigation_bar(
-            currentIndex:
-                _getCurrentIndex(state.uri.toString()), // state.location 사용
+            currentIndex: _getCurrentIndex(state.uri.toString()),
             onTabSelected: (index) => _onTabSelected(context, index),
           ),
         );
       },
       routes: [
         GoRoute(
-          path: '/',
-          builder: (context, state) => Mainview(),
+          path: '/home',
+          builder: (context, state) => SolutionDetailsView(
+            postId: 1,
+          ),
         ),
         GoRoute(
           path: '/normalWorry',
@@ -60,29 +64,27 @@ final GoRouter router = GoRouter(
 );
 
 int _getCurrentIndex(String location) {
-  if (location == '/') return 0;
+  if (location == '/home') return 0;
   if (location == '/todayWorry') return 1;
-  if (location == '/normalWorry' || location == '/aiWorry')
-    return 2; // 고민등록하기 경로 추가
+  if (location == '/normalWorry' || location == '/aiWorry') return 2;
   if (location == '/pastWorry') return 3;
   if (location == '/myProfile') return 4;
-  return 0; // 기본값은 홈
+  return 0;
 }
 
 void _onTabSelected(BuildContext context, int index) {
   if (index == 2) {
-    // 고민등록하기 버튼 클릭 시 인덱스를 2로 설정하여 색상 변경
-    (context as Element).markNeedsBuild(); // 위젯 리빌드 강제 (필요 시)
+    (context as Element).markNeedsBuild();
     _showPopupMenu(context);
   } else {
-    context.go(_getPathFromIndex(index)); // 다른 탭은 라우트로 이동
+    context.go(_getPathFromIndex(index));
   }
 }
 
 String _getPathFromIndex(int index) {
   switch (index) {
     case 0:
-      return '/';
+      return '/home';
     case 1:
       return '/todayWorry';
     case 3:
@@ -90,7 +92,7 @@ String _getPathFromIndex(int index) {
     case 4:
       return '/myProfile';
     default:
-      return '/';
+      return '/home';
   }
 }
 
@@ -115,28 +117,24 @@ void _showPopupMenu(BuildContext context) async {
       const PopupMenuItem<String>(
         value: 'general',
         child: Center(
-          child: Text(
-            '일반 고민 작성',
-            style: TextStyle(fontSize: 16, color: Colors.black),
-          ),
+          child: Text('일반 고민 작성',
+              style: TextStyle(fontSize: 16, color: Colors.black)),
         ),
       ),
       const PopupMenuDivider(),
       const PopupMenuItem<String>(
         value: 'ai',
         child: Center(
-          child: Text(
-            'AI 고민 작성',
-            style: TextStyle(fontSize: 16, color: Colors.black),
-          ),
+          child: Text('AI 고민 작성',
+              style: TextStyle(fontSize: 16, color: Colors.black)),
         ),
       ),
     ],
   ).then((String? value) {
     if (value == 'general') {
-      context.go('/normalWorry'); // 고민등록하기 페이지로 이동
+      context.go('/normalWorry');
     } else if (value == 'ai') {
-      context.go('/aiWorry'); // AI 고민 작성 페이지로 이동
+      context.go('/aiWorry');
     }
   });
 }

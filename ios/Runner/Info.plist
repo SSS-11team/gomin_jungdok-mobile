@@ -46,12 +46,9 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>앱이 갤러리에서 사진을 선택할 수 있도록 허용해주세요.</string>
+	<string>앱이 사진 라이브러리에 접근할 수 있도록 허용해 주세요.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>앱이 카메라를 사용할 수 있도록 허용해주세요.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>앱이 마이크를 사용할 수 있도록 허용해주세요.</string>
-
+	<string>앱이 카메라를 사용할 수 있도록 허용해 주세요.</string>
 	<!-- 🚀 네트워크 설정 수정 (올바른 구조) -->
 	<key>NSAppTransportSecurity</key>
 	<dict>

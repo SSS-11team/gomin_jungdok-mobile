@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gomin_jungdok_mobile/common/component/colors.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/provider/solutionDetails_prov.dart';
+import 'package:gomin_jungdok_mobile/common/const/colors.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/provider/solutionDetails_prov.dart';
 
 class SelectionButton extends ConsumerWidget {
   final String label;

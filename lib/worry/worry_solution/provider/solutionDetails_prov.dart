@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gomin_jungdok_mobile/common/provider/common_prov.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/data/repository/solutionDetails_repository.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/data/service/solutionDetailsService.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/data/model/solutionDetails_model.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/data/repository/solutionDetails_repository.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/data/service/solutionDetailsService.dart';
 
 // repo provider
 final detailRepoProvider = Provider<SolutionDetailsRepository>((ref) {

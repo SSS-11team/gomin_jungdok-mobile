@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gomin_jungdok_mobile/common/component/colors.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/presentation/widget/selectionButton_widget.dart';
-import 'package:gomin_jungdok_mobile/worry_solution/provider/solutionDetails_prov.dart';
+import 'package:gomin_jungdok_mobile/common/const/colors.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/widget/selectionButton_widget.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/provider/solutionDetails_prov.dart';
 
 class SolutionDetailsView extends ConsumerWidget {
   final int postId;
@@ -133,21 +133,6 @@ class SolutionDetailsView extends ConsumerWidget {
           error: (error, stackTrace) => Center(
             child: Text("오류 발생"),
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: MAIN_COLOR,
-          unselectedItemColor: MAIN_TEXT_COLOR,
-          backgroundColor: MAIN_BG_COLOR,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.local_fire_department), label: '오늘의 고민'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle_outline), label: '고민등록하기'),
-            BottomNavigationBarItem(icon: Icon(Icons.book), label: '과거의 고민'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-          ],
         ),
       ),
     );
