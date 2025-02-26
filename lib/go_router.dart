@@ -51,17 +51,8 @@ final GoRouter router = GoRouter(
           builder: (context, state) => MyProfile(),
         ),
         GoRoute(
-          path: '/aiWorry_analyze',
-          builder: (context, state) {
-            final selectedImage = state.extra as File?; // 🛠 null 가능성 고려
-
-            if (selectedImage == null) {
-              // 🔥 예외 처리: 선택된 이미지가 없으면 이전 화면으로 이동
-              return const AiWorry();
-            }
-
-            return AiAnalyze(selectedImage: selectedImage);
-          },
+          path: '/aiWorryAnalyze',
+          builder: (context, state) => AiAnalyze(),
         ),
       ],
     ),
