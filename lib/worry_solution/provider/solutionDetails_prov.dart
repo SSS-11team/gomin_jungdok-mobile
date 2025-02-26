@@ -29,4 +29,15 @@ final fetchDetailProvider =
   }
 });
 
+class VoteNotifier extends StateNotifier<int?> {
+  VoteNotifier() : super(null);
+
+  void seletedOption(int option) {
+    state = option;
+  }
+}
+
+final selectedOptionProvider =
+    StateNotifierProvider<VoteNotifier, int?>((ref) => VoteNotifier());
+
 enum LoadingState { error, loading, success, fail }
