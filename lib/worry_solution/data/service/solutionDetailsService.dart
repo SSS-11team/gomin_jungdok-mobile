@@ -19,17 +19,16 @@ class SolutionDetailsService {
     return response.data!;
   }
 
-  Future<SolutionVote> voteSolution(
-      int postId, Map<String, dynamic> vote) async {
+  Future<SolutionVote> voteSolution(int postId, int voteNum) async {
     final SolutionVote solutionVoteModel;
-    final response = await repository.solutionVote(id: postId, vote: vote);
+    final response =
+        await repository.solutionVote(id: postId, vote: {"vote": voteNum});
     debugPrint("[ERROR] Response error! :${response.statusCode.toString()}");
     if (response.statusCode != 201) {
-      print(
+      debugPrint(
           "[ERROR] Failed to vote solution - errorCode : ${response.statusCode}");
     }
-    print("====");
-    print(response.data!);
+
     solutionVoteModel = response.data!;
     return solutionVoteModel;
   }

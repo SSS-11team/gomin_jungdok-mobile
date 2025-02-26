@@ -47,7 +47,7 @@ class SelectionButton extends ConsumerWidget {
                 ref
                     .read(selectedOptionProvider.notifier)
                     .seletedOption(optionNum);
-                await service.voteSolution(1, {"vote": optionNum});
+                await service.voteSolution(1, optionNum);
                 ref.invalidate(fetchDetailProvider(1));
 
                 Navigator.of(context).pop();
@@ -66,17 +66,37 @@ class SelectionButton extends ConsumerWidget {
 
   void _showAlreadyVotedDialog(BuildContext context, WidgetRef ref) {
     showDialog(
+      barrierDismissible: false, // 다이얼로그 바깥 클릭 방지
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("투표 완료"),
-          content: const Text("이미 투표를 완료하셨습니다."),
+          backgroundColor: Colors.grey[100], // 배경색 추가
+          title: const Text(
+            "투표 완료",
+            style: TextStyle(
+              color: MAIN_TEXT_COLOR, // 텍스트 색상 맞추기
+              fontWeight: FontWeight.bold, // 굵은 글씨
+              fontSize: 20.0, // 제목 크기 동일하게 설정
+            ),
+          ),
+          content: const Text(
+            "이미 투표를 완료하셨습니다.",
+            style: TextStyle(color: MAIN_TEXT_COLOR), // 텍스트 색상 적용
+          ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("확인"),
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: const Text(
+                "확인",
+                style: TextStyle(color: MAIN_TEXT_COLOR), // 텍스트 색상 동일하게 적용
+              ),
             ),
           ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0), // 모서리 둥글기 제거
+          ),
         );
       },
     );

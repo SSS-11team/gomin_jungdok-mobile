@@ -58,8 +58,9 @@ class SolutionDetailsView extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      Text(info.isAi.toString(),
-                          style: TextStyle(color: MAIN_TEXT_COLOR)),
+                      // 현재 AI가 따로 없어 나중에 구현하도록 수정
+                      // Text(info.isAi.toString(),
+                      //     style: TextStyle(color: MAIN_TEXT_COLOR)),
                     ],
                   ),
                   const SizedBox(height: 16),
