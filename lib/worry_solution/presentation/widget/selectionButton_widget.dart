@@ -64,38 +64,39 @@ class SelectionButton extends ConsumerWidget {
     );
   }
 
+//
   void _showAlreadyVotedDialog(BuildContext context, WidgetRef ref) {
     showDialog(
-      barrierDismissible: false, // 다이얼로그 바깥 클릭 방지
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[100], // 배경색 추가
+          backgroundColor: Colors.grey[100],
           title: const Text(
             "투표 완료",
             style: TextStyle(
-              color: MAIN_TEXT_COLOR, // 텍스트 색상 맞추기
-              fontWeight: FontWeight.bold, // 굵은 글씨
-              fontSize: 20.0, // 제목 크기 동일하게 설정
+              color: MAIN_TEXT_COLOR,
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
             ),
           ),
           content: const Text(
             "이미 투표를 완료하셨습니다.",
-            style: TextStyle(color: MAIN_TEXT_COLOR), // 텍스트 색상 적용
+            style: TextStyle(color: MAIN_TEXT_COLOR),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop();
               },
               child: const Text(
                 "확인",
-                style: TextStyle(color: MAIN_TEXT_COLOR), // 텍스트 색상 동일하게 적용
+                style: TextStyle(color: MAIN_TEXT_COLOR),
               ),
             ),
           ],
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0), // 모서리 둥글기 제거
+            borderRadius: BorderRadius.circular(0),
           ),
         );
       },
@@ -106,7 +107,7 @@ class SelectionButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(selectedOptionProvider);
     final isSelected = selectedOption == optionNum;
-    final isDisabled = selectedOption != null; // 이미 선택된 옵션이 있는지 확인
+    final isDisabled = selectedOption != null;
 
     return ElevatedButton(
       onPressed: () {
