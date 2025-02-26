@@ -5,6 +5,14 @@ class PastWorry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Text(
+          '과거 고민 등록 페이지',
+          style: TextStyle(fontSize: 24, color: Colors.red),
+        ),
+      ),
+      backgroundColor: Colors.white,
+    );
   }
 }

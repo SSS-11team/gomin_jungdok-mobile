@@ -5,6 +5,14 @@ class TodayWorry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Text(
+          '오늘의 고민 페이지',
+          style: TextStyle(fontSize: 24, color: Colors.red),
+        ),
+      ),
+      backgroundColor: Colors.white,
+    );
   }
 }
