@@ -44,6 +44,9 @@ class SelectionButton extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () {
+                ref
+                    .read(selectedOptionProvider.notifier)
+                    .seletedOption(optionNum);
                 service.voteSolution(1, {"vote": optionNum});
                 Navigator.of(context).pop();
               },
@@ -59,12 +62,39 @@ class SelectionButton extends ConsumerWidget {
     );
   }
 
+  void _showAlreadyVotedDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("투표 완료"),
+          content: const Text("이미 투표를 완료하셨습니다."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("확인"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedOption = ref.watch(selectedOptionProvider);
+    final isSelected = selectedOption == optionNum;
     return ElevatedButton(
-      onPressed: () => _showConfirmationDialog(context, ref),
+      onPressed: () {
+        if (!isSelected) {
+          _showConfirmationDialog(context, ref);
+        } else {
+          _showAlreadyVotedDialog(context, ref);
+        }
+      },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: isSelected ? MAIN_TEXT_COLOR : Colors.grey[200],
+        // backgroundColor: Colors.grey[200],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
         ),
