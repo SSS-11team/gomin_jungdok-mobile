@@ -17,7 +17,7 @@ class NormalWorry extends StatefulWidget {
 class _NormalWorryState extends State<NormalWorry> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
-  int _introTextLength = 0;
+  // int _introTextLength = 0;
   int _focusedChoiceIndex = -1; // 선택된 선택지 인덱스
   final List<TextEditingController> _choiceControllers = [
     TextEditingController(),
@@ -25,7 +25,7 @@ class _NormalWorryState extends State<NormalWorry> {
   ];
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
   final List<XFile> _selectedImages = [];
-  final ImagePicker _picker = ImagePicker();
+// final ImagePicker _picker = ImagePicker();
 
   final Dio _dio = Dio(); // 서버와의 통신을 위함!
   final String apiUrl = BASE_URL;
@@ -34,9 +34,7 @@ class _NormalWorryState extends State<NormalWorry> {
   void initState() {
     super.initState();
     _introController.addListener(() {
-      setState(() {
-        _introTextLength = _introController.text.length;
-      });
+      setState(() {});
     });
     for (var i = 0; i < _choiceControllers.length; i++) {
       _choiceControllers[i].addListener(() {
@@ -471,9 +469,9 @@ class ImagePickerWidget extends StatelessWidget {
 
   Future<void> _pickImages(BuildContext context) async {
     try {
-      final List<XFile>? images = await _picker.pickMultiImage();
+      final List<XFile> images = await _picker.pickMultiImage();
 
-      if (images == null || images.isEmpty) {
+      if (images.isEmpty) {
         print("이미지가 선택되지 않음.");
         return;
       }
