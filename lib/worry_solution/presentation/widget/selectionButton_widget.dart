@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gomin_jungdok_mobile/common/component/colors.dart';
+import 'package:gomin_jungdok_mobile/worry_solution/provider/solutionDetails_prov.dart';
 
-class SelectionButton extends StatelessWidget {
+class SelectionButton extends ConsumerWidget {
   final String label;
+  final int optionNum;
   final int voteCount;
   final String votePercentage;
+
   const SelectionButton(
       {super.key,
       required this.label,
+      required this.optionNum,
       required this.voteCount,
       required this.votePercentage});
 
-  void _showConfirmationDialog(BuildContext context) {
+  void _showConfirmationDialog(BuildContext context, WidgetRef ref) {
+    final service = ref.read(detailServiceProvider);
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -37,6 +44,7 @@ class SelectionButton extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                service.voteSolution(1, {"vote": optionNum});
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -52,9 +60,9 @@ class SelectionButton extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
-      onPressed: () => _showConfirmationDialog(context),
+      onPressed: () => _showConfirmationDialog(context, ref),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.grey[200],
         shape: RoundedRectangleBorder(

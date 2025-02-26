@@ -105,6 +105,7 @@ class SolutionDetailsView extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: SelectionButton(
+                          optionNum: 1,
                           label: info.option1Content,
                           voteCount: info.option1Vote,
                           votePercentage: info.option1Percentage!,
@@ -113,6 +114,7 @@ class SolutionDetailsView extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: SelectionButton(
+                          optionNum: 2,
                           label: info.option2Content,
                           voteCount: info.option2Vote,
                           votePercentage: info.option2Percentage!,

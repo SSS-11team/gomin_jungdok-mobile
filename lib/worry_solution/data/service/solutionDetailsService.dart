@@ -9,16 +9,14 @@ class SolutionDetailsService {
   SolutionDetailsService(this.repository);
 
   Future<SolutionDetails> fetchSolutionDetails(int postId) async {
-    SolutionDetails solutionDetailsModel;
     final response = await repository.fetchDetailsSolutionPosts(id: postId);
 
     if (response.statusCode != 200 && response.statusCode != 201) {
-      debugPrint(
-          "[ERROR] failed to fetch solutionDetails - errorCode : ${response.statusCode}");
+      throw Exception(
+          "Failed to fetch solution details - ErrorCode: ${response.statusCode}");
     }
 
-    solutionDetailsModel = response.data!;
-    return solutionDetailsModel;
+    return response.data!;
   }
 
   Future<SolutionVote> voteSolution(

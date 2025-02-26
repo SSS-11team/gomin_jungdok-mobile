@@ -1,13 +1,9 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gomin_jungdok_mobile/common/provider/common_prov.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/model/solutionDetails_model.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/repository/solutionDetails_repository.dart';
 import 'package:gomin_jungdok_mobile/worry_solution/data/service/solutionDetailsService.dart';
-import 'package:riverpod/riverpod.dart';
-
-// Dio (API 호출을 위해 필요한 프로바이더)
-final dioProvider = Provider<Dio>((ref) {
-  return Dio();
-});
 
 // repo provider
 final detailRepoProvider = Provider<SolutionDetailsRepository>((ref) {
@@ -25,7 +21,12 @@ final detailServiceProvider = Provider<SolutionDetailsService>((ref) {
 final fetchDetailProvider =
     FutureProvider.family<SolutionDetails, int>((ref, postId) async {
   final service = ref.read(detailServiceProvider);
-  return service.fetchSolutionDetails(postId);
+  try {
+    return service.fetchSolutionDetails(postId);
+  } catch (e) {
+    debugPrint("[ERROR] fetchDetailProvider: $e");
+    rethrow;
+  }
 });
 
-enum LoadingState { error, loading, sucess, fail }
+enum LoadingState { error, loading, success, fail }
