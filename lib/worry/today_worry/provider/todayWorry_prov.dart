@@ -21,7 +21,7 @@ final todayWorryServiceProvider = Provider<TodayWorryService>((ref) {
 });
 
 final fetchTodayWorryPostsProvider =
-    FutureProvider.family<TodayWorry, int>((ref, postId) async {
+    FutureProvider<List<TodayWorry>>((ref) async {
   final service = ref.read(todayWorryServiceProvider);
   try {
     return service.fetchTodayWorryPosts();

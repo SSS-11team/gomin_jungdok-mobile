@@ -13,7 +13,7 @@ abstract class TodayWorryRepository {
       _TodayWorryRepository;
 
   @GET('')
-  Future<TodayWorry> fetchTodayWorryPosts();
+  Future<List<TodayWorry>> fetchTodayWorryPosts();
 
   @GET('/{post_id}')
   Future<TodayWorryDetails> fetchTodayWorryDetailsPosts({
