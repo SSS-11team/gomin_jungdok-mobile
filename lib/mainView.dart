@@ -75,17 +75,26 @@ class ApiService {
   // 고민 리스트 가져오기
   Future<List<Post>> fetchPosts(int size, int lastId) async {
     final url = Uri.parse('$baseUrl/api/post?size=$size&last-id=$lastId');
-
+    
     try {
       final response = await http.get(url);
+
+       // ✅ 상태 코드와 응답 본문 출력
+      print('📡 상태 코드: ${response.statusCode}');
+      print('📡 응답 본문: ${response.body}');
+      
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
         return data.map((post) => Post.fromJson(post)).toList();
+      } else {
+        print('❌ 오류: 상태 코드 ${response.statusCode}');
+        return [];
       }
     } catch (e) {
       print('Error fetching posts: $e');
     }
-    return [];
+    return [Post(id: 4, content: '고민 4 - 인터넷 연결 없음'),
+        Post(id: 5, content: '고민 5 - 서버 다운'),];
   }
 
   // 선택지 투표
