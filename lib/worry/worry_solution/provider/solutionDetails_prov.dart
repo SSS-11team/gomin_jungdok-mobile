@@ -37,6 +37,7 @@ class VoteNotifier extends StateNotifier<int?> {
   }
 }
 
+// 전역적으로 관리 중이라 디테일에서만 사용가능함
 final selectedOptionProvider =
     StateNotifierProvider<VoteNotifier, int?>((ref) => VoteNotifier());
 
