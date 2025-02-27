@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gomin_jungdok_mobile/common/const/colors.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryDetails_screen.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/provider/todayWorry_prov.dart';
 
@@ -11,7 +12,11 @@ class TodayWorryListScreens extends ConsumerWidget {
     final todayWorryPosts = ref.watch(fetchTodayWorryPostsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('오늘의 고민 목록')),
+      backgroundColor: MAIN_BG_COLOR,
+      appBar: AppBar(
+        title: const Text('오늘의 고민 목록'),
+        backgroundColor: MAIN_BG_COLOR,
+      ),
       body: todayWorryPosts.when(
         data: (todayWorryList) {
           return ListView.builder(
