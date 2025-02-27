@@ -6,14 +6,14 @@
 ## 팀원 소개
 <table border="1">
     <tr>
-        <th>남궁혜민</th>
-        <th>권민석</th>
-        <th>이서현</th>
+        <th align="center">남궁혜민</th>
+        <th align="center">권민석</th>
+        <th align="center">이서현</th>
     </tr>
     <tr>
-        <td>플러터 (모바일)_모바일 팀장</td>
-        <td>플러터 (모바일)</td>
-        <td>플러터 (모바일)</td>
+        <td align="center">플러터 (모바일)_모바일 팀장</td>
+        <td align="center">플러터 (모바일)</td>
+        <td align="center">플러터 (모바일)</td>
     </tr>
     <tr>
         <td>
