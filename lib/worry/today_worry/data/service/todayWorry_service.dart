@@ -2,19 +2,16 @@ import 'package:gomin_jungdok_mobile/worry/today_worry/data/model/todayWorryDeta
 import 'package:gomin_jungdok_mobile/worry/today_worry/data/model/todayWorry_model.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/data/repository/todayWorry_repository.dart';
 
-class TodayworryService {
+class TodayWorryService {
   final TodayWorryRepository repository;
 
-  TodayworryService(this.repository);
+  TodayWorryService(this.repository);
 
   Future<TodayWorry> fetchTodayWorryPosts() async {
-    final response = await repository.fetchTodayWorryPosts();
-
-    return response;
+    return await repository.fetchTodayWorryPosts();
   }
 
   Future<TodayWorryDetails> fetchTodayWorryDetailsPost(int postId) async {
-    final response = await repository.fetchTodayWorryDetailsPosts(id: postId);
-    return response;
+    return await repository.fetchTodayWorryDetailsPosts(id: postId);
   }
 }

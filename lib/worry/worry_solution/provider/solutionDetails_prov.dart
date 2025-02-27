@@ -6,14 +6,14 @@ import 'package:gomin_jungdok_mobile/worry/worry_solution/data/repository/soluti
 import 'package:gomin_jungdok_mobile/worry/worry_solution/data/service/solutionDetailsService.dart';
 
 // repo provider
-final detailRepoProvider = Provider<SolutionDetailsRepository>((ref) {
+final solutionDetailRepoProvider = Provider<SolutionDetailsRepository>((ref) {
   final dio = ref.read(dioProvider);
   return SolutionDetailsRepository(dio);
 });
 
 //service provider
 final detailServiceProvider = Provider<SolutionDetailsService>((ref) {
-  final repo = ref.read(detailRepoProvider);
+  final repo = ref.read(solutionDetailRepoProvider);
   return SolutionDetailsService(repo);
 });
 
@@ -28,14 +28,6 @@ final fetchDetailProvider =
     rethrow;
   }
 });
-
-// class VoteNotifier extends StateNotifier<int?> {
-//   VoteNotifier() : super(null);
-
-//   void seletedOption(int option) {
-//     state = option;
-//   }
-// }
 
 class VoteNotifier extends StateNotifier<Map<int, int?>> {
   VoteNotifier() : super({}); // ✅ 초기 상태: 모든 postId에 대해 선택 없음
