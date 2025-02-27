@@ -3,11 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gomin_jungdok_mobile/common/const/apiUrl.dart';
-import 'package:gomin_jungdok_mobile/worryRegist/tooltip_screen.dart';
+import 'package:gomin_jungdok_mobile/common/const/api.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/component/widgets/tooltip_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NormalWorry extends StatefulWidget {
+  const NormalWorry({super.key});
+
   @override
   _NormalWorryState createState() => _NormalWorryState();
 }
@@ -15,7 +17,7 @@ class NormalWorry extends StatefulWidget {
 class _NormalWorryState extends State<NormalWorry> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
-  int _introTextLength = 0;
+  // int _introTextLength = 0;
   int _focusedChoiceIndex = -1; // 선택된 선택지 인덱스
   final List<TextEditingController> _choiceControllers = [
     TextEditingController(),
@@ -23,18 +25,16 @@ class _NormalWorryState extends State<NormalWorry> {
   ];
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
   final List<XFile> _selectedImages = [];
-  final ImagePicker _picker = ImagePicker();
+// final ImagePicker _picker = ImagePicker();
 
   final Dio _dio = Dio(); // 서버와의 통신을 위함!
-  final String apiUrl = apiURL;
+  final String apiUrl = BASE_URL;
 
   @override
   void initState() {
     super.initState();
     _introController.addListener(() {
-      setState(() {
-        _introTextLength = _introController.text.length;
-      });
+      setState(() {});
     });
     for (var i = 0; i < _choiceControllers.length; i++) {
       _choiceControllers[i].addListener(() {
@@ -69,77 +69,79 @@ class _NormalWorryState extends State<NormalWorry> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      // 선택지를 눌렀을때 appbar의 색상이 변하는
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            context.go('/');
-          },
-        ),
-      ),
-      body: Stack(
-        children: [
-          Divider(
-            color: Colors.grey,
-            thickness: 1,
-            height: 1,
+        // 선택지를 눌렀을때 appbar의 색상이 변하는
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              context.go('/');
+            },
           ),
-          SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTitleField(controller: _titleController),
-                      CustomIntroField(controller: _introController),
-                      BubbleWidget(comment: "필요에 따라 설명에 사진을 추가할 수 있어요"),
-                      ImagePickerWidget(
-                        selectedImages: _selectedImages,
-                        onImageSelected: _updateImages,
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildChoiceField('첫번째 선택지', 0),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: _buildChoiceField('두번째 선택지', 1),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      ElevatedButton(
-                        onPressed: _submitWorry,
-                        child: Center(child: Text('등록하기')),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          backgroundColor: Colors.grey.shade300,
-                          foregroundColor: Colors.black,
+        ),
+        body: Stack(
+          children: [
+            Divider(
+              color: Colors.grey,
+              thickness: 1,
+              height: 1,
+            ),
+            SafeArea(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTitleField(controller: _titleController),
+                        CustomIntroField(controller: _introController),
+                        BubbleWidget(comment: "필요에 따라 설명에 사진을 추가할 수 있어요"),
+                        ImagePickerWidget(
+                          selectedImages: _selectedImages,
+                          onImageSelected: _updateImages,
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildChoiceField('첫번째 선택지', 0),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: _buildChoiceField('두번째 선택지', 1),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30),
+                        ElevatedButton(
+                          onPressed: _submitWorry,
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            backgroundColor: Colors.grey.shade300,
+                            foregroundColor: Colors.black,
+                          ),
+                          child: Center(child: Text('등록하기')),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -293,8 +295,7 @@ class _NormalWorryState extends State<NormalWorry> {
 class CustomTitleField extends StatefulWidget {
   final TextEditingController controller; // 🔥 외부에서 컨트롤러를 받음
 
-  const CustomTitleField({required this.controller, Key? key})
-      : super(key: key);
+  const CustomTitleField({required this.controller, super.key});
 
   @override
   _CustomTitleFieldState createState() => _CustomTitleFieldState();
@@ -370,7 +371,7 @@ class _CustomTitleFieldState extends State<CustomTitleField> {
 class CustomIntroField extends StatefulWidget {
   final TextEditingController controller;
 
-  CustomIntroField({required this.controller});
+  const CustomIntroField({super.key, required this.controller});
 
   @override
   State<CustomIntroField> createState() => _CustomIntroFieldState();
@@ -462,19 +463,31 @@ class ImagePickerWidget extends StatelessWidget {
   final Function(List<XFile>) onImageSelected;
 
   ImagePickerWidget(
-      {required this.selectedImages, required this.onImageSelected});
+      {super.key, required this.selectedImages, required this.onImageSelected});
 
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImages(BuildContext context) async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-    if (images != null) {
-      if (selectedImages.length + images.length > 4) {
-        int spaceLeft = 4 - selectedImages.length;
-        onImageSelected([...selectedImages, ...images.take(spaceLeft)]);
-      } else {
-        onImageSelected([...selectedImages, ...images]);
+    try {
+      final List<XFile> images = await _picker.pickMultiImage();
+
+      if (images.isEmpty) {
+        print("이미지가 선택되지 않음.");
+        return;
       }
+
+      List<XFile> validImages = images.where((image) {
+        return image.path.isNotEmpty && File(image.path).existsSync();
+      }).toList();
+
+      if (selectedImages.length + validImages.length > 4) {
+        int spaceLeft = 4 - selectedImages.length;
+        onImageSelected([...selectedImages, ...validImages.take(spaceLeft)]);
+      } else {
+        onImageSelected([...selectedImages, ...validImages]);
+      }
+    } catch (e) {
+      print("이미지 선택 중 오류 발생: $e");
     }
   }
 
@@ -535,12 +548,17 @@ class ImagePickerWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        File(image.path), // ✅ Image.asset 대신 Image.file 사용
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                      ),
+                      child: File(image.path).existsSync()
+                          ? Image.file(
+                              File(image.path), // ✅ 경로 정리 후 Image.file 사용
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(Icons.error, size: 60),
+                            )
+                          : Icon(Icons.error,
+                              size: 60), // 파일이 존재하지 않으면 에러 아이콘 표시
                     ),
                     GestureDetector(
                       onTap: () => _removeImage(index),
