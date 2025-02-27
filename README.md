@@ -6,7 +6,7 @@
 ## 팀원 소개
 <table border="1">
     <tr>
-        <th>남궁혜민 모바일 팀장</th>
+        <th>남궁혜민</th>
         <th>권민석</th>
         <th>이서현</th>
     </tr>
