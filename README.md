@@ -1,7 +1,7 @@
 # GOMIN_JUNGDOK_MOBILE
 
-<img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9" width=200 height=200 align=center> 
-<style align=center> <p>안녕하세요 고민중독 모바일 플러터 팀입니다!!</p></style>
+<p align="center"><img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9" width=200 height=200 ></p>
+<p align="center">안녕하세요 고민중독 모바일 플러터 팀입니다!!</p>
 
 ## 팀원 소개
 <table border="1">
@@ -53,6 +53,7 @@
  우리는 사소한 선택에도 많은 시간을 고민하는 경우가 많습니다. ____**는 간단한 고민을 많은 사람들의 의견을 받아 결정을 더 쉽게 내릴 수 있도록 기획되었습니다.** 사용자 간에 고민을 나누고, 투표와 토론을 통해 새로운 시각을 얻을 수 있는 공간입니다. 나의 고민을 해결하는 것을 넘어, 다른 사람의 고민에 참여하며 재미와 소통의 즐거움도 느낄 수 있는 플랫폼입니다.
 
  **____는 사용자들이 더 즐겁고 가벼운 마음으로 고민을 해결할 수 있도록 돕고자 합니다.**
+
 
 
 <div align=center><h1>📚 TECH STACK 📚</h1></div>
