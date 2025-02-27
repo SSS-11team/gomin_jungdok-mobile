@@ -50,6 +50,7 @@ dependencies:
   keyboard_avoider: ^0.2.0
   image_picker: ^1.1.2
   lucide_icons: ^0.257.0
+  flutter_launcher_icons: ^0.14.3
 
 
 dev_dependencies:
@@ -81,7 +82,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/icons/logoTypo.svg
-    - assets/icons/로고+타이포.png
+    - assets/launcher_icon/logoTypo.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
