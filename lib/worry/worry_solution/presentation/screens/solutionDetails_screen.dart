@@ -106,6 +106,7 @@ class SolutionDetailsView extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: SelectionButton(
+                          postId: postId,
                           optionNum: 1,
                           label: info.option1Content,
                           voteCount: info.option1Vote,
@@ -115,6 +116,7 @@ class SolutionDetailsView extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: SelectionButton(
+                          postId: postId,
                           optionNum: 2,
                           label: info.option2Content,
                           voteCount: info.option2Vote,

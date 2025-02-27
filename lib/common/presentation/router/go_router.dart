@@ -29,7 +29,7 @@ final GoRouter router = GoRouter(
         );
       },
       routes: [
-        GoRoute(path: '/home', builder: (context, state) => HomeContent()),
+        GoRoute(path: '/home', builder: (context, state) => MainView()),
         GoRoute(
           path: '/normalWorry',
           builder: (context, state) => NormalWorry(),
