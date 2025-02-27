@@ -1,4 +1,4 @@
-# GOMIN_JUNGDOK_MOBILE
+![혜민님](https://github.com/user-attachments/assets/2aaa208a-3a22-457f-aa3d-212ad03eb71c)# GOMIN_JUNGDOK_MOBILE
 
 <p align="center"><img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9" width=200 height=200 ></p>
 <p align="center">안녕하세요 고민중독 모바일 플러터 팀입니다!!</p>
@@ -17,10 +17,10 @@
     </tr>
     <tr>
         <td>
-            <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#17129a414f5581ac9d13e3082201c564" width=300 height=150> 
+            <img src="https://github.com/user-attachments/assets/9aac6745-4967-4ad8-a1ea-08b4b260a3e0" width=300 height=150> 
         </td>
         <td>
-            <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#17129a414f558109aec9df80239ff86a" width=300 height=150> 
+            <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=150> 
         </td>
         <td>
             <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#e74b546373d74733bca5f18d5e5d13f6" width=300 height=150> 
