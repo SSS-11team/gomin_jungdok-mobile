@@ -407,14 +407,22 @@ class SelectionButton extends ConsumerWidget {
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold)),
 
-          // ✅ 투표 후에만 결과 표시
+          // 투표 후에만 결과 표시
           if (hasVoted) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(voteCount.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(" ($votePercentage)"),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 69, 68, 68),
+                    )),
+                Text(
+                  " ($votePercentage)",
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 69, 68, 68),
+                  ),
+                ),
               ],
             ),
           ],
