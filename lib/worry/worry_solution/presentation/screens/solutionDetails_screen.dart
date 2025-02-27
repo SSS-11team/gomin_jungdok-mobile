@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gomin_jungdok_mobile/common/const/colors.dart';
+import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/widget/selectionButton_widget.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/provider/solutionDetails_prov.dart';
 
@@ -19,7 +20,9 @@ class SolutionDetailsView extends ConsumerWidget {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: MAIN_TEXT_COLOR),
-            onPressed: () {},
+            onPressed: () {
+              router.pop();
+            },
           ),
           actions: [
             IconButton(
