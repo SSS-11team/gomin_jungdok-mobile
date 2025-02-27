@@ -23,7 +23,7 @@
             <img src="" width=300 height=300> 
         </td>
         <td>
-            <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=150> 
+            <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=300> 
         </td>
     </tr>
 </table>
