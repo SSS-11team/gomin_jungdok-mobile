@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/data/model/todayWorry_model.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/data/model/todayWorryDetails_model.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/data/service/todayWorry_service.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/data/repository/todayWorry_repository.dart';
+import 'package:gomin_jungdok_mobile/common/provider/common_prov.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/provider/todayWorry_prov.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
 class TodayWorryListScreens extends ConsumerWidget {
   const TodayWorryListScreens({super.key});
@@ -59,16 +65,40 @@ class TodayWorryDetailsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(details.postTitle,
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Text(details.postDesc),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(details.postTitle,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            Text(details.postDesc,
+                                style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
-                details.imageUrls != null && details.imageUrls!.isNotEmpty
-                    ? SizedBox(
-                        height: 150,
-                        child: ListView.builder(
+                Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: details.imageUrls != null &&
+                          details.imageUrls!.isNotEmpty
+                      ? ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: details.imageUrls!.length,
                           itemBuilder: (context, index) {
@@ -78,17 +108,23 @@ class TodayWorryDetailsScreen extends ConsumerWidget {
                                   fit: BoxFit.cover),
                             );
                           },
-                        ),
-                      )
-                    : const Center(child: Text('이미지가 없습니다')),
+                        )
+                      : const Center(child: Text('이미지가 없습니다')),
+                ),
                 const SizedBox(height: 16),
                 const Divider(thickness: 1.0),
                 const SizedBox(height: 16),
-                Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: details.voteResults.map((vote) {
-                    return ListTile(
-                      title: Text(vote.option),
-                      subtitle: Text("투표율: ${vote.percentage}%"),
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          Text(vote.option,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text("투표율: ${vote.percentage}%"),
+                        ],
+                      ),
                     );
                   }).toList(),
                 ),
