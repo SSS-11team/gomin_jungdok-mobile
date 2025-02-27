@@ -17,10 +17,10 @@
     </tr>
     <tr>
         <td>
-            <img src="https://github.com/user-attachments/assets/9aac6745-4967-4ad8-a1ea-08b4b260a3e0" width=300 height=150> 
+            <img src="https://github.com/user-attachments/assets/9aac6745-4967-4ad8-a1ea-08b4b260a3e0" width=300 height=300> 
         </td>
         <td>
-            <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=150> 
+            <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=300> 
         </td>
         <td>
             <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#e74b546373d74733bca5f18d5e5d13f6" width=300 height=150> 
