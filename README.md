@@ -1,4 +1,4 @@
-![혜민님](https://github.com/user-attachments/assets/2aaa208a-3a22-457f-aa3d-212ad03eb71c)# GOMIN_JUNGDOK_MOBILE
+# GOMIN_JUNGDOK_MOBILE
 
 <p align="center"><img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9" width=200 height=200 ></p>
 <p align="center">안녕하세요 고민중독 모바일 플러터 팀입니다!!</p>
