@@ -2,19 +2,22 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/api.dart';
+import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/component/widgets/tooltip_screen.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
 import 'package:image_picker/image_picker.dart';
 
-class NormalWorry extends StatefulWidget {
+class NormalWorry extends ConsumerStatefulWidget {
   const NormalWorry({super.key});
 
   @override
   _NormalWorryState createState() => _NormalWorryState();
 }
 
-class _NormalWorryState extends State<NormalWorry> {
+class _NormalWorryState extends ConsumerState<NormalWorry> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
   // int _introTextLength = 0;
@@ -80,7 +83,7 @@ class _NormalWorryState extends State<NormalWorry> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              context.go('/');
+              context.pop();
             },
           ),
         ),
@@ -123,7 +126,10 @@ class _NormalWorryState extends State<NormalWorry> {
                         ),
                         SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: _submitWorry,
+                          onPressed: () async {
+                            _submitWorry;
+                            router.go('/home');
+                          },
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(double.infinity, 50),
                             shape: RoundedRectangleBorder(
@@ -198,7 +204,8 @@ class _NormalWorryState extends State<NormalWorry> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("고민글 작성 완료! 🎉")),
         );
-
+        ref.invalidate(postProvider);
+        router.go('/home');
         // 입력 필드 초기화
         _clearFields();
       } else {
