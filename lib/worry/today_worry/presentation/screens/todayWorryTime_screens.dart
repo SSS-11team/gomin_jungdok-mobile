@@ -2,14 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class TodayWorry extends StatefulWidget {
-  const TodayWorry({super.key});
+class TodayWorryTime extends StatefulWidget {
+  const TodayWorryTime({super.key});
 
   @override
-  State<TodayWorry> createState() => _TodayWorry();
+  State<TodayWorryTime> createState() => _TodayWorry();
 }
 
-class _TodayWorry extends State<TodayWorry> {
+class _TodayWorry extends State<TodayWorryTime> {
   late Timer _timer;
   Duration _remainingTime = Duration.zero;
 
