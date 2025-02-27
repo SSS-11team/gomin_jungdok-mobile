@@ -29,15 +29,25 @@ final fetchDetailProvider =
   }
 });
 
-class VoteNotifier extends StateNotifier<int?> {
-  VoteNotifier() : super(null);
+// class VoteNotifier extends StateNotifier<int?> {
+//   VoteNotifier() : super(null);
 
-  void seletedOption(int option) {
-    state = option;
+//   void seletedOption(int option) {
+//     state = option;
+//   }
+// }
+
+class VoteNotifier extends StateNotifier<Map<int, int?>> {
+  VoteNotifier() : super({}); // ✅ 초기 상태: 모든 postId에 대해 선택 없음
+
+  void selectOption(int postId, int option) {
+    state = {...state, postId: option}; // ✅ 특정 postId만 선택 상태 변경
   }
 }
 
+// ✅ 게시글별 선택 상태를 저장하는 Provider (postId별로 선택지 관리)
 final selectedOptionProvider =
-    StateNotifierProvider<VoteNotifier, int?>((ref) => VoteNotifier());
+    StateNotifierProvider<VoteNotifier, Map<int, int?>>(
+        (ref) => VoteNotifier());
 
 enum LoadingState { error, loading, success, fail }

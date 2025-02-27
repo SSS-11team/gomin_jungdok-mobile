@@ -40,13 +40,6 @@ class _TodayWorry extends State<TodayWorry> {
     super.dispose();
   }
 
-  String _formatDuration(Duration duration) {
-    int hours = duration.inHours;
-    int minutes = duration.inMinutes.remainder(60);
-    int seconds = duration.inSeconds.remainder(60);
-    return "$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +70,7 @@ class _TodayWorry extends State<TodayWorry> {
               style: TextStyle(fontSize: 25),
             ),
             Text(
-              _formatDuration(_remainingTime),
+              formatDuration(_remainingTime),
               style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -114,4 +107,11 @@ class _TodayWorry extends State<TodayWorry> {
       ),
     );
   }
+}
+
+String formatDuration(Duration duration) {
+  int hours = duration.inHours;
+  int minutes = duration.inMinutes.remainder(60);
+  int seconds = duration.inSeconds.remainder(60);
+  return "$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
 }
