@@ -1,14 +1,25 @@
 # GOMIN_JUNGDOK_MOBILE
 
 안녕하세요 고민중독 모바일 플러터 팀입니다!!
-<img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9"> 
+<img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9" width=300 height=150> 
 
 
 ## 팀원 소개
+<tr><th>남궁혜민 모바일 팀장</th><th>권민석</th><th>이서현</th></tr>
 
-- 남궁혜민 모바일 팀장
-- 권민석
-- 이서현
+<tr><td>플러터 (모바일)_모바일 팀장</td><td>플러터 (모바일)</td><td>플러터 (모바일)</td></tr>
+
+<tr>
+<td>
+    <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#17129a414f5581ac9d13e3082201c564" width=300 height=150> 
+</td>
+<td>
+    <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#17129a414f558109aec9df80239ff86a" width=300 height=150> 
+</td>
+<td>
+    <img src="https://www.notion.so/17129a414f55811d934ec774fbac1d8f?pvs=4#e74b546373d74733bca5f18d5e5d13f6" width=300 height=150> 
+</td>
+</tr>
 
 ## 서비스 소개
 
