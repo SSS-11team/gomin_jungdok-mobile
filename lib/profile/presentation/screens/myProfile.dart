@@ -33,7 +33,7 @@ class MyProfile extends StatelessWidget {
             SizedBox(
               width: 150,
               height: 150,
-              child: Image.asset('assets/icons/로고+타이포.png'),
+              child: Image.asset('assets/launcher_icon/logoTypo.png'),
             ),
             SizedBox(height: 40),
             Expanded(

@@ -34,25 +34,25 @@ class ApiService {
 
     try {
       final response = await http.get(uri);
-      // 상태 코드 및 응답 본문 출력
+      // ✅ 상태 코드 및 응답 본문 출력
       debugPrint('📡 상태 코드: ${response.statusCode}');
       debugPrint('📡 응답 본문: ${response.body}');
 
       if (response.statusCode == 200) {
-        //  JSON 응답이 `Map<String, dynamic>` 형태인지 확인 후 `data` 필드 추출
+        // ✅ JSON 응답이 `Map<String, dynamic>` 형태인지 확인 후 `data` 필드 추출
         final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
         final posts = (jsonResponse['data']?['posts'] as List?)
             ?.map((post) => Post.fromJson(post))
             .toList();
 
-        return posts ?? []; // null 대신 빈 리스트 반환
+        return posts ?? []; // ✅ null 대신 빈 리스트 반환
       } else {
         debugPrint('❌ 오류: 상태 코드 ${response.statusCode}');
-        return []; // 오류 발생 시 빈 리스트 반환
+        return []; // ✅ 오류 발생 시 빈 리스트 반환
       }
     } catch (e) {
       debugPrint('Error fetching posts: $e');
-      return []; //  예외 발생 시 빈 리스트 반환
+      return []; // ✅ 예외 발생 시 빈 리스트 반환
     }
   }
 
@@ -80,7 +80,7 @@ final postProvider = FutureProvider<List<Post>>((ref) async {
   return await apiService.fetchPosts();
 });
 
-//  formatDuration 함수 적용
+// ✅ formatDuration 함수 적용
 String formatDuration(Duration duration) {
   int hours = duration.inHours;
   int minutes = duration.inMinutes.remainder(60);
@@ -106,6 +106,7 @@ class _MainViewState extends ConsumerState<MainView> {
     _startTimer();
   }
 
+  // ✅ 현재 시간과 자정까지 남은 시간을 계산
   void _calculateRemainingTime() {
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
@@ -114,6 +115,7 @@ class _MainViewState extends ConsumerState<MainView> {
     });
   }
 
+  // ✅ 1초마다 남은 시간 업데이트
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _calculateRemainingTime();
@@ -130,71 +132,11 @@ class _MainViewState extends ConsumerState<MainView> {
   Widget build(BuildContext context) {
     final postAsync = ref.watch(postProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            _buildTimerUI(), // ✅ UX 개선된 타이머 UI
-            const SizedBox(height: 10),
-            Expanded(
-              child: postAsync.when(
-                data: (posts) => _buildPostList(posts), // ✅ UX 개선된 게시글 리스트
-                loading: () => _buildLoadingUI(),
-                error: (error, stackTrace) => _buildErrorUI(error),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTimerUI() {
-    return Column(
-      children: [
-        Container(
-          width: 360,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 255, 235, 206),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: [
-              Text(
-                "오늘의 고민 마감까지 남은 시간",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                formatDuration(_remainingTime),
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.redAccent,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-      ],
-    );
-  }
-
-  Widget _buildPostList(List<Post> posts) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        final solutionDetailsAsync = ref.watch(fetchDetailProvider(post.id));
-        final info = solutionDetailsAsync.value;
             // ✅ 남은시간 카운트
             Container(
               color: Colors.white,
@@ -306,10 +248,9 @@ class _MainViewState extends ConsumerState<MainView> {
                 ),
               ),
             ),
-          ]
-return null;,
+          ],
         ),
       ),
-    )
+    );
   }
 }
