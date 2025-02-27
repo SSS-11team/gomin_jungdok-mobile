@@ -8,7 +8,7 @@ import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
 import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
-import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/solutionDetails_screen.dart';
+import 'package:gomin_jungdok_mobile/mainView.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/splash', // 초기 경로를 스플래시로 설정
@@ -28,12 +28,7 @@ final GoRouter router = GoRouter(
         );
       },
       routes: [
-        GoRoute(
-          path: '/home',
-          builder: (context, state) => SolutionDetailsView(
-            postId: 1,
-          ),
-        ),
+        GoRoute(path: '/home', builder: (context, state) => HomeContent()),
         GoRoute(
           path: '/normalWorry',
           builder: (context, state) => NormalWorry(),
