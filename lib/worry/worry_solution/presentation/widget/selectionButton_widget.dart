@@ -389,44 +389,79 @@ class SelectionButton extends ConsumerWidget {
     final isSelected = selectedOptions[postId] == optionNum;
     final isDisabled = hasVoted;
 
-    return ElevatedButton(
-      onPressed: () {
-        if (!isSelected && !isDisabled) {
-          _showConfirmationDialog(context, ref);
-        } else {
-          _showAlreadyVotedDialog(context);
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.grey[500] : Colors.grey[200],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      ),
-      child: Column(
-        children: [
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.bold)),
-
-          // 투표 후에만 결과 표시
-          if (hasVoted) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(voteCount.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 69, 68, 68),
-                    )),
-                Text(
-                  " ($votePercentage)",
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 69, 68, 68),
-                  ),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0), // ✅ 버튼 좌우 여백 추가
+      child: SizedBox(
+        width: 100, // ✅ 버튼 크기 동일하게 유지
+        height: 70, // ✅ 높이 충분히 확보하여 Overflow 해결
+        child: ElevatedButton(
+          onPressed: () {
+            if (!isSelected && !isDisabled) {
+              _showConfirmationDialog(context, ref);
+            } else {
+              _showAlreadyVotedDialog(context);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isSelected
+                ? Color.fromARGB(255, 255, 222, 209)
+                : Colors.white, // ✅ 선택 시 연한 주황색 배경
+            side: BorderSide(
+              color: isSelected
+                  ? Color(0xFFFA743E)
+                  : Colors.black26, // ✅ 선택 시 주황색 테두리, 기본은 연한 회색
+              width: isSelected ? 1.5 : 1,
             ),
-          ],
-        ],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8), // ✅ 버튼을 살짝 둥글게
+            ),
+            elevation: 0, // ✅ 그림자 제거하여 깔끔한 디자인 유지
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // ✅ 내부 크기 자동 조정
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedContainer(
+                duration:
+                    const Duration(milliseconds: 200), // ✅ 부드럽게 올라가도록 애니메이션 추가
+                padding: EdgeInsets.only(
+                    bottom: hasVoted ? 6 : 0), // ✅ 선택 후 텍스트 위로 이동
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87, // ✅ 글자는 항상 검은색 유지
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              if (hasVoted)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // ✅ 중앙 정렬
+                  children: [
+                    Text(
+                      voteCount.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(width: 4), // ✅ 숫자와 퍼센트 사이 여백 추가
+                    Text(
+                      "($votePercentage)", // ✅ 퍼센트 괄호 포함
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

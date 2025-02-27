@@ -134,6 +134,10 @@ class _MainViewState extends ConsumerState<MainView> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
           children: [
             _buildTimerUI(), // ✅ UX 개선된 타이머 UI
             const SizedBox(height: 10),
@@ -191,87 +195,121 @@ class _MainViewState extends ConsumerState<MainView> {
         final post = posts[index];
         final solutionDetailsAsync = ref.watch(fetchDetailProvider(post.id));
         final info = solutionDetailsAsync.value;
-
-        return InkWell(
-          onTap: () => context.push('/details', extra: post.id),
-          borderRadius: BorderRadius.circular(10),
-          child: Card(
-            elevation: 3,
-            color: const Color.fromARGB(255, 251, 246, 243),
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
+            // ✅ 남은시간 카운트
+            Container(
+              color: Colors.white,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 30,
+                  ),
                   Text(
-                    post.title,
+                    "오늘의 고민 공개 전까지",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    formatDuration(_remainingTime),
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFFFA743E),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  if (info != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: SelectionButton(
-                            postId: post.id,
-                            label: info.option1Content,
-                            optionNum: 1,
-                            voteCount: info.option1Vote,
-                            votePercentage: "${info.option1Percentage}",
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: SelectionButton(
-                            postId: post.id,
-                            label: info.option2Content,
-                            optionNum: 2,
-                            voteCount: info.option2Vote,
-                            votePercentage: "${info.option2Percentage}",
-                          ),
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 25,
+                  )
                 ],
               ),
             ),
-          ),
-        );
-      },
-    );
-  }
+            // ✅ 게시글 목록
+            Expanded(
+              child: Scrollbar(
+                thumbVisibility: false, // 🔥 스크롤 시에만 스크롤바 보이게 설정
+                child: postAsync.when(
+                  data: (posts) => ListView.separated(
+                    itemCount: posts.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(color: Colors.grey),
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      final solutionDetailsAsync =
+                          ref.watch(fetchDetailProvider(post.id));
+                      final info = solutionDetailsAsync.value;
 
-  Widget _buildLoadingUI() {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: Colors.redAccent,
-      ),
-    );
-  }
+                      return GestureDetector(
+                        onTap: () {
+                          context.push('/details', extra: post.id);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ✅ 게시글 제목
+                              Padding(
+                                padding: const EdgeInsets.only(left: 25.0),
+                                child: Text(
+                                  post.title,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8.0),
 
-  Widget _buildErrorUI(Object error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error, color: Colors.redAccent, size: 40),
-          const SizedBox(height: 8),
-          const Text(
-            "오류가 발생했습니다. 다시 시도해주세요!",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(error.toString(), style: const TextStyle(color: Colors.grey)),
-        ],
+                              // ✅ 선택지 버튼
+                              if (info != null)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .start, // ✅ 선택지가 왼쪽 정렬되도록 수정
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: SizedBox(
+                                        width: 177,
+                                        child: SelectionButton(
+                                          postId: post.id,
+                                          label: info.option1Content,
+                                          optionNum: 1,
+                                          voteCount: info.option1Vote,
+                                          votePercentage:
+                                              "${info.option1Vote}%",
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10), // 버튼 간격 유지
+                                    SizedBox(
+                                      width: 177, // ✅ 동일한 크기 설정
+                                      child: SelectionButton(
+                                        postId: post.id,
+                                        label: info.option2Content,
+                                        optionNum: 2,
+                                        voteCount: info.option2Vote,
+                                        votePercentage: "${info.option2Vote}%",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (error, stackTrace) =>
+                      const Center(child: Text("오류 발생")),
+                ),
+              ),
+            ),
+          ]
+return null;,
+        ),
       ),
-    );
+    )
   }
 }
