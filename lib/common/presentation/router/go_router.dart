@@ -8,7 +8,7 @@ import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
 import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
-import 'package:gomin_jungdok_mobile/mainView.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
 final GoRouter router = GoRouter(
