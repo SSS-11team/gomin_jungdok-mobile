@@ -20,7 +20,7 @@
             <img src="https://github.com/user-attachments/assets/9aac6745-4967-4ad8-a1ea-08b4b260a3e0" width=300 height=300> 
         </td>
         <td>
-            <img src="" width=300 height=300> 
+            <img src="https://github.com/user-attachments/assets/0ecad41d-e681-4bba-96cc-f979f476f00d" width=300 height=300> 
         </td>
         <td>
             <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=300> 
