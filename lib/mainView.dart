@@ -656,6 +656,7 @@
 // }
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/api.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -667,7 +668,7 @@ class HomeContent extends StatefulWidget {
   _HomeContentState createState() => _HomeContentState();
 }
 
-// ✅ 게시글 모델
+//여기까지
 class Post {
   final int id;
   final String title;
@@ -884,46 +885,61 @@ class _HomeContentState extends State<HomeContent> {
                     final post = posts[index];
                     final selected = selectedOptions[post.id];
 
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 25.0),
-                            child: Text(post.title,
+                    return GestureDetector(
+                      onTap: () {
+                        context.push('/details', extra: post.id);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 25.0),
+                              child: Text(
+                                post.title,
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black87)),
-                          ),
-                          SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: selected == null
-                                    ? () => showVoteDialog(post.id, 1)
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: selected == 1
-                                      ? Colors.red
-                                      : Colors.grey[300],
-                                ),
-                                child: Text('선택지1'),
+                                    fontSize: 18, color: Colors.black87),
                               ),
-                              ElevatedButton(
-                                onPressed: selected == null
-                                    ? () => showVoteDialog(post.id, 2)
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: selected == 2
-                                      ? Colors.red
-                                      : Colors.grey[300],
+                            ),
+                            SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: selected == null
+                                      ? () => showVoteDialog(post.id, 1)
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: const Size(150, 62),
+                                    minimumSize: const Size(150, 62),
+                                    backgroundColor: selected == 1
+                                        ? Colors.red
+                                        : Colors.grey[300],
+                                    foregroundColor: Colors.black,
+                                    shape: BeveledRectangleBorder(),
+                                  ),
+                                  child: Text('선택지1'),
                                 ),
-                                child: Text('선택지2'),
-                              ),
-                            ],
-                          ),
-                        ],
+                                ElevatedButton(
+                                  onPressed: selected == null
+                                      ? () => showVoteDialog(post.id, 2)
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: const Size(150, 62),
+                                    minimumSize: const Size(150, 62),
+                                    backgroundColor: selected == 2
+                                        ? Colors.red
+                                        : Colors.grey[300],
+                                    foregroundColor: Colors.black,
+                                    shape: BeveledRectangleBorder(),
+                                  ),
+                                  child: Text('선택지2'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   } else {
