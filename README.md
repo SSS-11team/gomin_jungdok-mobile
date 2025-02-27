@@ -1,7 +1,8 @@
 # GOMIN_JUNGDOK_MOBILE
 
 안녕하세요 고민중독 모바일 플러터 팀입니다!!
-<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
+<img src="https://github.com/user-attachments/assets/da03a156-bc09-4ccd-8377-594d768133f9"> 
+
 
 ## 팀원 소개
 
