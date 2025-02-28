@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/api.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/component/widgets/tooltip_screen.dart';
-import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/%08widget.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/widgets/customTitleField.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
 import 'package:image_picker/image_picker.dart';
 

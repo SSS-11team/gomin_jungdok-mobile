@@ -5,6 +5,7 @@ import 'package:gomin_jungdok_mobile/common/presentation/widgets/navigation_bar.
 import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
 import 'package:gomin_jungdok_mobile/worry/past_worry/presentation/screens/pastWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryList_screens.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryTime_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_analyze.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
@@ -38,10 +39,10 @@ final GoRouter router = GoRouter(
           path: '/aiWorry',
           builder: (context, state) => AiWorry(),
         ),
-        // GoRoute(
-        //   path: '/todayWorry',
-        //   builder: (context, state) => TodayWorryTime(),
-        // ),
+        GoRoute(
+          path: '/todayWorryTimer',
+          builder: (context, state) => TodayWorryTime(),
+        ),
         GoRoute(
           path: '/todayWorry',
           builder: (context, state) => TodayWorryListScreens(),

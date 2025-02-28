@@ -49,6 +49,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gomin_jungdok_mobile/common/const/colors.dart';
+import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryDetails_screen.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/provider/todayWorry_prov.dart';
 
@@ -155,41 +156,80 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 25.0),
-                                  child: Text(
-                                    post.title,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        post.title,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 40,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(3.0),
+                                        // color: const Color.fromARGB(
+                                        //     255, 242, 213, 202),
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 255, 225, 213),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          '오늘의 고민 ${todayStringList[index]..toString()}번째',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: MAIN_COLOR,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(height: 8.0),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 25.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Row(
                                     children: [
-                                      Container(
-                                        height: 150,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                      Expanded(
+                                        child: Container(
+                                          height: 100,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Center(
+                                              child: Text('1',
+                                                  style:
+                                                      TextStyle(fontSize: 20))),
                                         ),
-                                        child: Text('data'),
                                       ),
-                                      const SizedBox(width: 100.0),
-                                      Container(
-                                        height: 150,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                      const SizedBox(width: 10.0),
+                                      Expanded(
+                                        child: Container(
+                                          height: 100,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[300],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            '2',
+                                            style: TextStyle(fontSize: 20),
+                                          )),
                                         ),
-                                        child: Text('data'),
                                       ),
                                     ],
                                   ),
@@ -213,3 +253,5 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
     );
   }
 }
+
+List<String> todayStringList = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟'];
