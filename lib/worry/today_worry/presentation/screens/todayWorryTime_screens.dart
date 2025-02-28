@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 
-class TodayWorry extends StatefulWidget {
-  const TodayWorry({super.key});
+class TodayWorryTime extends StatefulWidget {
+  const TodayWorryTime({super.key});
 
   @override
-  State<TodayWorry> createState() => _TodayWorry();
+  State<TodayWorryTime> createState() => _TodayWorry();
 }
 
-class _TodayWorry extends State<TodayWorry> {
+class _TodayWorry extends State<TodayWorryTime> {
   late Timer _timer;
   Duration _remainingTime = Duration.zero;
 
@@ -65,9 +66,12 @@ class _TodayWorry extends State<TodayWorry> {
             SizedBox(
               height: 260,
             ),
-            Text(
-              "오늘의 고민 공개 전까지",
-              style: TextStyle(fontSize: 25),
+            TextButton(
+              onPressed: () => router.go('/todayWorry'),
+              child: Text(
+                "오늘의 고민 공개 전까지",
+                style: TextStyle(fontSize: 25),
+              ),
             ),
             Text(
               formatDuration(_remainingTime),

@@ -75,123 +75,6 @@ class ApiService {
   }
 }
 
-// final postProvider = FutureProvider<List<Post>>((ref) async {
-//   final apiService = ApiService();
-//   return await apiService.fetchPosts();
-// });
-
-// class MainView extends ConsumerWidget {
-//   const MainView({super.key});
-
-//   // ✅ 남은 시간 계산
-//   String formatDuration(Duration duration) {
-//     int hours = duration.inHours;
-//     int minutes = duration.inMinutes.remainder(60);
-//     int seconds = duration.inSeconds.remainder(60);
-//     return "$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-//   }
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final postAsync = ref.watch(postProvider);
-//     Duration remainingTime = Duration(hours: 24); // 기본 24시간 남음
-
-//     return SafeArea(
-//       child: Scaffold(
-//         body: Column(
-//           children: [
-//             // ✅ 남은시간 카운트
-//             Container(
-//               width: 250,
-//               height: 30,
-//               color: Colors.grey[300],
-//               child: Center(
-//                 child: Text(
-//                   formatDuration(remainingTime),
-//                   style: const TextStyle(
-//                       fontSize: 15, fontWeight: FontWeight.bold),
-//                 ),
-//               ),
-//             ),
-//             const Text('남은시간 카운트',
-//                 style: TextStyle(fontSize: 9, color: Colors.black54)),
-
-//             // ✅ 게시글 목록
-//             Expanded(
-//               child: postAsync.when(
-//                 data: (posts) => ListView.separated(
-//                   itemCount: posts.length,
-//                   separatorBuilder: (context, index) =>
-//                       Divider(color: Colors.grey),
-//                   itemBuilder: (context, index) {
-//                     final post = posts[index];
-//                     final solutionDetailsAsync =
-//                         ref.watch(fetchDetailProvider(post.id));
-//                     final info = solutionDetailsAsync.value;
-//                     return GestureDetector(
-//                       onTap: () {
-//                         context.push('/details', extra: post.id);
-//                       },
-//                       child: Padding(
-//                         padding: const EdgeInsets.symmetric(vertical: 12.0),
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             // ✅ 게시글 제목
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 25.0),
-//                               child: Text(
-//                                 post.title,
-//                                 style: const TextStyle(
-//                                     fontSize: 18, color: Colors.black87),
-//                               ),
-//                             ),
-//                             const SizedBox(height: 8.0),
-
-//                             // ✅ 선택지 버튼
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                               children: [
-//                                 Expanded(
-//                                   child: SelectionButton(
-//                                     postId: post.id,
-//                                     label: info!.option1Content,
-//                                     optionNum: 1,
-//                                     voteCount: info.option2Vote,
-//                                     votePercentage:
-//                                         "${info.option2Vote.toString()}%",
-//                                   ),
-//                                 ),
-//                                 const SizedBox(width: 10),
-//                                 Expanded(
-//                                   child: SelectionButton(
-//                                     postId: post.id,
-//                                     label: info.option2Content,
-//                                     optionNum: 2,
-//                                     voteCount: info.option2Vote,
-//                                     votePercentage:
-//                                         "${info.option1Vote.toString()}%",
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 ),
-//                 loading: () => const Center(child: CircularProgressIndicator()),
-//                 error: (error, stackTrace) =>
-//                     const Center(child: Text("오류 발생")),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 final postProvider = FutureProvider<List<Post>>((ref) async {
   final apiService = ApiService();
   return await apiService.fetchPosts();
@@ -249,95 +132,120 @@ class _MainViewState extends ConsumerState<MainView> {
   Widget build(BuildContext context) {
     final postAsync = ref.watch(postProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
           children: [
             // ✅ 남은시간 카운트
             Container(
-              width: 250,
-              height: 30,
-              color: Colors.grey[300],
-              child: Center(
-                child: Text(
-                  formatDuration(_remainingTime), // ✅ formatDuration 적용
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.bold),
-                ),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    "오늘의 고민 공개 전까지",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    formatDuration(_remainingTime),
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFA743E),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  )
+                ],
               ),
             ),
-            const Text('남은시간 카운트',
-                style: TextStyle(fontSize: 9, color: Colors.black54)),
-
             // ✅ 게시글 목록
             Expanded(
-              child: postAsync.when(
-                data: (posts) => ListView.separated(
-                  itemCount: posts.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(color: Colors.grey),
-                  itemBuilder: (context, index) {
-                    final post = posts[index];
-                    final solutionDetailsAsync =
-                        ref.watch(fetchDetailProvider(post.id));
-                    final info = solutionDetailsAsync.value;
+              child: Scrollbar(
+                thumbVisibility: false, // 🔥 스크롤 시에만 스크롤바 보이게 설정
+                child: postAsync.when(
+                  data: (posts) => ListView.separated(
+                    itemCount: posts.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(color: Colors.grey),
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      final solutionDetailsAsync =
+                          ref.watch(fetchDetailProvider(post.id));
+                      final info = solutionDetailsAsync.value;
 
-                    return GestureDetector(
-                      onTap: () {
-                        context.push('/details', extra: post.id);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // ✅ 게시글 제목
-                            Padding(
-                              padding: const EdgeInsets.only(left: 25.0),
-                              child: Text(
-                                post.title,
-                                style: const TextStyle(
-                                    fontSize: 18, color: Colors.black87),
+                      return GestureDetector(
+                        onTap: () {
+                          context.push('/details', extra: post.id);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ✅ 게시글 제목
+                              Padding(
+                                padding: const EdgeInsets.only(left: 25.0),
+                                child: Text(
+                                  post.title,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8.0),
+                              const SizedBox(height: 8.0),
 
-                            // ✅ 선택지 버튼
-                            if (info != null)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: SelectionButton(
-                                      postId: post.id,
-                                      label: info.option1Content,
-                                      optionNum: 1,
-                                      voteCount: info.option1Vote,
-                                      votePercentage: "${info.option1Vote}%",
+                              // ✅ 선택지 버튼
+                              if (info != null)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .start, // ✅ 선택지가 왼쪽 정렬되도록 수정
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: SizedBox(
+                                        width: 177,
+                                        child: SelectionButton(
+                                          postId: post.id,
+                                          label: info.option1Content,
+                                          optionNum: 1,
+                                          voteCount: info.option1Vote,
+                                          votePercentage:
+                                              "${info.option1Vote}%",
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: SelectionButton(
-                                      postId: post.id,
-                                      label: info.option2Content,
-                                      optionNum: 2,
-                                      voteCount: info.option2Vote,
-                                      votePercentage: "${info.option2Vote}%",
+                                    const SizedBox(width: 10), // 버튼 간격 유지
+                                    SizedBox(
+                                      width: 177, // ✅ 동일한 크기 설정
+                                      child: SelectionButton(
+                                        postId: post.id,
+                                        label: info.option2Content,
+                                        optionNum: 2,
+                                        voteCount: info.option2Vote,
+                                        votePercentage: "${info.option2Vote}%",
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                          ],
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (error, stackTrace) =>
+                      const Center(child: Text("오류 발생")),
                 ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) =>
-                    const Center(child: Text("오류 발생")),
               ),
             ),
           ],

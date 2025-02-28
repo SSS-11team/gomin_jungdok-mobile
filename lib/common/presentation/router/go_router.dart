@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/screens/splash_screen.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/widgets/navigation_bar.dart';
-import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorry.dart';
+import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
 import 'package:gomin_jungdok_mobile/worry/past_worry/presentation/screens/pastWorry.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryList_screens.dart';
+import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryTime_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_analyze.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/%08ai_worry/presentation/screens/ai_worry.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
-import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/solutionDetails_screen.dart';
 
@@ -39,8 +40,12 @@ final GoRouter router = GoRouter(
           builder: (context, state) => AiWorry(),
         ),
         GoRoute(
+          path: '/todayWorryTimer',
+          builder: (context, state) => TodayWorryTime(),
+        ),
+        GoRoute(
           path: '/todayWorry',
-          builder: (context, state) => TodayWorry(),
+          builder: (context, state) => TodayWorryListScreens(),
         ),
         GoRoute(
           path: '/pastWorry',
