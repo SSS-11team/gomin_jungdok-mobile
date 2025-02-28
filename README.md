@@ -6,21 +6,21 @@
 ## 팀원 소개
 <table border="1">
     <tr>
-        <th>남궁혜민</th>
-        <th>권민석</th>
-        <th>이서현</th>
+        <th align="center">남궁혜민</th>
+        <th align="center">권민석</th>
+        <th align="center">이서현</th>
     </tr>
     <tr>
-        <td>플러터 (모바일)_모바일 팀장</td>
-        <td>플러터 (모바일)</td>
-        <td>플러터 (모바일)</td>
+        <td align="center">플러터 (모바일)_모바일 팀장</td>
+        <td align="center">플러터 (모바일)</td>
+        <td align="center">플러터 (모바일)</td>
     </tr>
     <tr>
         <td>
             <img src="https://github.com/user-attachments/assets/9aac6745-4967-4ad8-a1ea-08b4b260a3e0" width=300 height=300> 
         </td>
         <td>
-            <img src="" width=300 height=300> 
+            <img src="https://github.com/user-attachments/assets/0ecad41d-e681-4bba-96cc-f979f476f00d" width=300 height=300> 
         </td>
         <td>
             <img src="https://github.com/user-attachments/assets/afeab4d3-ea0f-4ca9-a065-f738dcddffe4" width=300 height=300> 
@@ -28,7 +28,9 @@
     </tr>
 </table>
 
+
 ## 서비스 소개
+
 
 ### (서비스명) - (서비스 한줄소개)
 
