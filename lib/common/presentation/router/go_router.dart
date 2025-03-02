@@ -40,13 +40,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) => AiWorry(),
         ),
         GoRoute(
-          path: '/todayWorryTimer',
+          path: '/todayWorry',
           builder: (context, state) => TodayWorryTime(),
         ),
-        GoRoute(
-          path: '/todayWorry',
-          builder: (context, state) => TodayWorryListScreens(),
-        ),
+        // GoRoute(
+        //   path: '/todayWorry',
+        //   builder: (context, state) => TodayWorryListScreens(),
+        // ),
         GoRoute(
           path: '/pastWorry',
           builder: (context, state) => PastWorry(),

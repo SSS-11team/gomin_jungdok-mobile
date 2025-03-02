@@ -419,45 +419,53 @@ class SelectionButton extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // ✅ 내부 크기 자동 조정
+            mainAxisSize: MainAxisSize.min, // ✅ 내부 위젯 크기에 맞게 자동 조정
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedContainer(
-                duration:
-                    const Duration(milliseconds: 200), // ✅ 부드럽게 올라가도록 애니메이션 추가
-                padding: EdgeInsets.only(
-                    bottom: hasVoted ? 6 : 0), // ✅ 선택 후 텍스트 위로 이동
+              SizedBox(
+                // ✅ 높이 강제 조정 (Overflow 방지)
+                height: 20, // 🔥 글자 크기에 맞게 적절한 높이 설정
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 16,
+                  style: const TextStyle(
+                    fontSize: 14, // 🔥 글자 크기 줄여서 Overflow 방지
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87, // ✅ 글자는 항상 검은색 유지
+                    color: Colors.black87,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
               if (hasVoted)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // ✅ 중앙 정렬
-                  children: [
-                    Text(
-                      voteCount.toString(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                Padding(
+                  padding: const EdgeInsets.only(top: 2), // 🔥 여백 최소화
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min, // ✅ 내부 크기에 맞게 조정
+                    children: [
+                      Flexible(
+                        // ✅ 텍스트 길이에 맞게 자동 줄바꿈
+                        child: Text(
+                          voteCount.toString(),
+                          style: const TextStyle(
+                            fontSize: 12, // 🔥 글자 크기 조정
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4), // ✅ 숫자와 퍼센트 사이 여백 추가
-                    Text(
-                      "($votePercentage)", // ✅ 퍼센트 괄호 포함
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade500,
+                      const SizedBox(width: 4),
+                      Flexible(
+                        // ✅ 퍼센트도 자동 크기 조정
+                        child: Text(
+                          "($votePercentage)",
+                          style: TextStyle(
+                            fontSize: 12, // 🔥 글자 크기 조정
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
             ],
           ),

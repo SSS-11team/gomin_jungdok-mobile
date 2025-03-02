@@ -218,7 +218,7 @@ class _MainViewState extends ConsumerState<MainView> {
                                           optionNum: 1,
                                           voteCount: info.option1Vote,
                                           votePercentage:
-                                              "${info.option1Vote}%",
+                                              "${info.option1Percentage}",
                                         ),
                                       ),
                                     ),
@@ -230,7 +230,8 @@ class _MainViewState extends ConsumerState<MainView> {
                                         label: info.option2Content,
                                         optionNum: 2,
                                         voteCount: info.option2Vote,
-                                        votePercentage: "${info.option2Vote}%",
+                                        votePercentage:
+                                            "${info.option2Percentage}",
                                       ),
                                     ),
                                   ],

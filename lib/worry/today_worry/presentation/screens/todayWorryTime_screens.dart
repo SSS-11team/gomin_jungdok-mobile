@@ -66,12 +66,9 @@ class _TodayWorry extends State<TodayWorryTime> {
             SizedBox(
               height: 260,
             ),
-            TextButton(
-              onPressed: () => router.go('/todayWorry'),
-              child: Text(
-                "오늘의 고민 공개 전까지",
-                style: TextStyle(fontSize: 25),
-              ),
+            Text(
+              "오늘의 고민 공개 전까지",
+              style: TextStyle(fontSize: 25),
             ),
             Text(
               formatDuration(_remainingTime),
