@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(const Duration(milliseconds: 3000), () {
       if (mounted) {
-        context.go('/home'); // go_router를 사용한 화면 전환
+        context.go('/login'); // go_router를 사용한 화면 전환
       }
     });
   }

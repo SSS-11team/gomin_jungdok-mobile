@@ -50,6 +50,12 @@ dependencies:
   keyboard_avoider: ^0.2.0
   image_picker: ^1.1.2
   lucide_icons: ^0.257.0
+  firebase_core: ^3.12.1
+  google_sign_in: ^6.3.0
+  kakao_flutter_sdk: ^1.9.6
+  kakao_flutter_sdk_user: ^1.9.6
+  firebase_auth: ^5.5.1
+  sign_in_with_apple: ^6.1.4
 
 
 dev_dependencies:
@@ -82,6 +88,7 @@ flutter:
   assets:
     - assets/icons/logoTypo.svg
     - assets/icons/로고+타이포.png
+    - assets/images/kakaoBar.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
