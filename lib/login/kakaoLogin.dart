@@ -21,22 +21,19 @@ class KakaoAuthService {
 
       if (accessToken == null) {
         throw Exception("카카오 액세스 토큰을 가져오지 못했습니다.");
+      } else {
+        print("✅ 카카오 로그인 성공! 액세스 토큰: $accessToken");
       }
-
-      print("✅ 카카오 로그인 성공! 액세스 토큰: $accessToken");
-
       // 🔹 백엔드에 사용자 정보 요청
       Response response = await _dio.get(
-        "$BASE_URL/api/auth/kakao/user",
-        options: Options(headers: {
-          "Authorization": "Bearer $accessToken",
-        }),
+        "$BASE_URL/api/auth/kakao/login",
+        // options: Options(headers: {
+        //   "Authorization": "Bearer $accessToken",
+        // }),
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        String userNickname = response.data["nickname"] ?? "닉네임 없음";
-        print("✅ 사용자 정보 조회 성공: $userNickname");
-        return userNickname;
+      if (response.statusCode == 302 && response.data != null) {
+        print("✅ 로그인 성공");
       } else {
         throw Exception("사용자 정보 조회 실패");
       }
