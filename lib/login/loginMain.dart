@@ -41,25 +41,27 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
   Future<void> _handleKakaoLogin() async {
     try {
       String? nickname = await _kakaoAuthService.loginWithKakao();
-      if (nickname != null) {
+      if (nickname != null && mounted) {
         setState(() {
           userNickname = nickname;
         });
-
         print("✅ 로그인 성공: $nickname");
       } else {
         print("❌ 로그인 실패: 사용자 정보 없음");
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("카카오 로그인 실패")),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("카카오 로그인 실패")),
+          );
+        }
       }
     } catch (error) {
       print("❌ 로그인 중 오류 발생: $error");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("로그인 중 오류가 발생했습니다.")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("로그인 중 오류가 발생했습니다.")),
+        );
+      }
     } finally {
-      // ✅ 로그인 성공 여부와 관계없이 '/home'으로 이동
       if (mounted) {
         context.go('/home');
       }
@@ -69,7 +71,7 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
   Future<void> _handleGoogleLogin() async {
     try {
       String? googleNickname = await _googleAuthService.signInWithGoogle();
-      if (googleNickname != null) {
+      if (googleNickname != null && mounted) {
         setState(() {
           userNickname = googleNickname;
         });
@@ -80,7 +82,6 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
     } catch (error) {
       print("❌ 구글 로그인 중 오류 발생: $error");
     } finally {
-      // ✅ 로그인 성공 여부와 관계없이 '/home'으로 이동
       if (mounted) {
         context.go('/home');
       }
@@ -90,7 +91,7 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
   Future<void> _handleAppleLogin() async {
     try {
       String? appleNickname = await _appleAuthService.signInWithApple();
-      if (appleNickname != null) {
+      if (appleNickname != null && mounted) {
         setState(() {
           userNickname = appleNickname;
         });
@@ -101,7 +102,6 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
     } catch (error) {
       print("❌ 애플 로그인 중 오류 발생: $error");
     } finally {
-      // ✅ 로그인 성공 여부와 관계없이 '/home'으로 이동
       if (mounted) {
         context.go('/home');
       }

@@ -8,7 +8,7 @@ import 'package:gomin_jungdok_mobile/common/const/api.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/component/widgets/tooltip_screen.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class NormalWorry extends ConsumerStatefulWidget {
   const NormalWorry({super.key});
@@ -20,6 +20,7 @@ class NormalWorry extends ConsumerStatefulWidget {
 class _NormalWorryState extends ConsumerState<NormalWorry> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
+  String? selectedCategory;
   // int _introTextLength = 0;
   int _focusedChoiceIndex = -1; // 선택된 선택지 인덱스
   final List<TextEditingController> _choiceControllers = [
@@ -27,7 +28,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
     TextEditingController(),
   ];
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
-  final List<XFile> _selectedImages = [];
+  List<AssetEntity> _selectedImages = [];
 // final ImagePicker _picker = ImagePicker();
 
   final Dio _dio = Dio(); // 서버와의 통신을 위함!
@@ -51,7 +52,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
     }
   }
 
-  void _updateImages(List<XFile> newImages) {
+  void _updateImages(List<AssetEntity> newImages) {
     setState(() {
       _selectedImages.clear();
       _selectedImages.addAll(newImages);
@@ -104,11 +105,24 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTitleField(controller: _titleController),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        CategorySelector(
+                          initialCategory: "친구",
+                          onSelected: (category) {
+                            selectedCategory = category;
+                          },
+                        ),
                         CustomIntroField(controller: _introController),
                         BubbleWidget(comment: "필요에 따라 설명에 사진을 추가할 수 있어요"),
-                        ImagePickerWidget(
+                        WeChatImagePickerWidget(
                           selectedImages: _selectedImages,
-                          onImageSelected: _updateImages,
+                          onImageSelected: (newAssets) {
+                            setState(() {
+                              _selectedImages = newAssets;
+                            });
+                          },
                         ),
                         SizedBox(
                           height: 25,
@@ -127,8 +141,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                         SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () async {
-                            _submitWorry;
-                            router.go('/home');
+                            await _submitWorry();
                           },
                           style: ElevatedButton.styleFrom(
                             minimumSize: Size(double.infinity, 50),
@@ -155,6 +168,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   Future<void> _submitWorry() async {
     FocusScope.of(context).unfocus();
     debugPrint("✅ 제목: ${_titleController.text}");
+    debugPrint("✅ 선택된 카테고리: ${selectedCategory}");
     debugPrint("✅ 설명: ${_introController.text}");
     debugPrint("✅ 선택지1: ${_choiceControllers[0].text}");
     debugPrint("✅ 선택지2: ${_choiceControllers[1].text}");
@@ -163,21 +177,30 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
         _choiceControllers[0].text.trim().isEmpty ||
         _choiceControllers[1].text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("제목, 설명, 선택지를 모두 입력해주세요.")),
+        SnackBar(content: Text("제목, 카테고리, 설명, 선택지를 모두 입력해주세요.")),
       );
       return;
     }
 
     try {
       List<MapEntry<String, MultipartFile>> imageFiles = [];
-      for (var image in _selectedImages) {
-        MultipartFile file =
-            await MultipartFile.fromFile(image.path, filename: image.name);
-        imageFiles.add(MapEntry("images", file)); // ✅ MapEntry로 변환
+
+      for (var asset in _selectedImages) {
+        final file = await asset.file;
+        final name = await asset.titleAsync;
+
+        if (file != null) {
+          MultipartFile multipartFile = await MultipartFile.fromFile(
+            file.path,
+            filename: name ?? 'image.jpg',
+          );
+          imageFiles.add(MapEntry("images", multipartFile));
+        }
       }
 
       FormData formData = FormData.fromMap({
-        "title": _introController.text.trim(), // 제목
+        "title": _titleController.text.trim(), // 제목
+        "category": selectedCategory, // 카테고리
         "description": _introController.text.trim(), // 고민 설명
         "option1": _choiceControllers[0].text.trim(), // 첫 번째 선택지
         "option2": _choiceControllers[1].text.trim(), // 두 번째 선택지
@@ -211,15 +234,18 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
       } else {
         throw Exception("고민글 작성 실패: ${response.statusMessage}");
       }
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint("❌ 예외 발생: $e");
+      debugPrint("❌ 스택트레이스: $stack");
+
       if (e is DioException) {
         debugPrint("❌ DioException 발생!");
-        debugPrint("❌ 요청 URL: $apiUrl/api/post");
+        debugPrint("❌ 요청 URL: ${e.requestOptions.uri}");
         debugPrint("❌ 요청 데이터: ${e.requestOptions.data}");
         debugPrint("❌ 응답 코드: ${e.response?.statusCode}");
         debugPrint("❌ 응답 데이터: ${e.response?.data}");
-        debugPrint("❌ DioException 메시지: ${e.message}");
       }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("오류 발생: ${e.toString()}")),
       );
@@ -465,42 +491,98 @@ class _CustomIntroFieldState extends State<CustomIntroField> {
   }
 }
 
-class ImagePickerWidget extends StatelessWidget {
-  final List<XFile> selectedImages;
-  final Function(List<XFile>) onImageSelected;
+class CategorySelector extends StatefulWidget {
+  final String? initialCategory;
+  final Function(String) onSelected;
 
-  ImagePickerWidget(
-      {super.key, required this.selectedImages, required this.onImageSelected});
+  const CategorySelector({
+    super.key,
+    this.initialCategory,
+    required this.onSelected,
+  });
 
-  final ImagePicker _picker = ImagePicker();
+  @override
+  State<CategorySelector> createState() => _CategorySelectorState();
+}
+
+class _CategorySelectorState extends State<CategorySelector> {
+  final categories = ["일상", "연애", "진로", "인간관계", "사회생활", "기타"];
+  String? selected;
+
+  @override
+  void initState() {
+    super.initState();
+    selected = widget.initialCategory;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40, // 높이 고정해서 한 줄로 유지
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          final isSelected = selected == category;
+
+          return ChoiceChip(
+            label: Text(
+              category,
+              style: TextStyle(
+                fontSize: 14,
+                color: isSelected ? Colors.white : Colors.black,
+              ),
+            ),
+            selected: isSelected,
+            onSelected: (bool selectedNow) {
+              setState(() {
+                selected = category;
+              });
+              widget.onSelected(category);
+            },
+            selectedColor: const Color(0xFFFA743E),
+            backgroundColor: Colors.grey.shade200,
+            showCheckmark: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class WeChatImagePickerWidget extends StatelessWidget {
+  final List<AssetEntity> selectedImages;
+  final Function(List<AssetEntity>) onImageSelected;
+
+  const WeChatImagePickerWidget({
+    super.key,
+    required this.selectedImages,
+    required this.onImageSelected,
+  });
 
   Future<void> _pickImages(BuildContext context) async {
-    try {
-      final List<XFile> images = await _picker.pickMultiImage();
+    final List<AssetEntity>? assets = await AssetPicker.pickAssets(
+      context,
+      pickerConfig: AssetPickerConfig(
+        maxAssets: 4,
+        selectedAssets: selectedImages,
+        requestType: RequestType.image,
+      ),
+    );
 
-      if (images.isEmpty) {
-        print("이미지가 선택되지 않음.");
-        return;
-      }
-
-      List<XFile> validImages = images.where((image) {
-        return image.path.isNotEmpty && File(image.path).existsSync();
-      }).toList();
-
-      if (selectedImages.length + validImages.length > 4) {
-        int spaceLeft = 4 - selectedImages.length;
-        onImageSelected([...selectedImages, ...validImages.take(spaceLeft)]);
-      } else {
-        onImageSelected([...selectedImages, ...validImages]);
-      }
-    } catch (e) {
-      print("이미지 선택 중 오류 발생: $e");
+    if (assets != null && assets.isNotEmpty) {
+      onImageSelected(assets);
     }
   }
 
   void _removeImage(int index) {
-    List<XFile> updatedList = List.from(selectedImages)..removeAt(index);
-    onImageSelected(updatedList);
+    final updated = List<AssetEntity>.from(selectedImages)..removeAt(index);
+    onImageSelected(updated);
   }
 
   @override
@@ -520,64 +602,68 @@ class ImagePickerWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.camera_alt, size: 24, color: Colors.grey),
+                const Icon(Icons.camera_alt, size: 24, color: Colors.grey),
                 Text.rich(TextSpan(children: [
                   TextSpan(
                     text: "${selectedImages.length}",
-                    style: TextStyle(
-                      color: Color(0xFFFA743E),
-                      fontSize: 12,
-                    ),
+                    style:
+                        const TextStyle(color: Color(0xFFFA743E), fontSize: 12),
                   ),
-                  TextSpan(
-                      text: "/4",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      )),
+                  const TextSpan(
+                    text: "/4",
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ])),
               ],
             ),
           ),
         ),
-        SizedBox(width: 10),
-
-        // 선택한 이미지 리스트
+        const SizedBox(width: 10),
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: selectedImages.asMap().entries.map((entry) {
-                int index = entry.key;
-                XFile image = entry.value;
-                return Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: File(image.path).existsSync()
-                          ? Image.file(
-                              File(image.path), // ✅ 경로 정리 후 Image.file 사용
+                final index = entry.key;
+                final asset = entry.value;
+
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: FutureBuilder<File?>(
+                    future: asset.file,
+                    builder: (context, snapshot) {
+                      final file = snapshot.data;
+                      if (file == null) {
+                        return const Icon(Icons.image_not_supported, size: 60);
+                      }
+
+                      return Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              file,
                               width: 60,
                               height: 60,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(Icons.error, size: 60),
-                            )
-                          : Icon(Icons.error,
-                              size: 60), // 파일이 존재하지 않으면 에러 아이콘 표시
-                    ),
-                    GestureDetector(
-                      onTap: () => _removeImage(index),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black54,
-                        ),
-                        child: Icon(Icons.close, size: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => _removeImage(index),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black54,
+                              ),
+                              child: const Icon(Icons.close,
+                                  size: 16, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 );
               }).toList(),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/api.dart';
+import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/screens/normal_worry.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/widget/selectionButton_widget.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/provider/solutionDetails_prov.dart';
 import 'dart:async';
@@ -13,13 +14,15 @@ import 'package:http/http.dart' as http;
 class Post {
   final int id;
   final String title;
+  final String category;
 
-  Post({required this.id, required this.title});
+  Post({required this.id, required this.title, required this.category});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'] as int,
       title: json['title'] as String,
+      category: json['category'] as String ?? '기타',
     );
   }
 }
@@ -215,7 +218,7 @@ class MainView extends ConsumerStatefulWidget {
 class _MainViewState extends ConsumerState<MainView> {
   late Timer _timer;
   Duration _remainingTime = Duration.zero;
-
+  String selectedCategory = "전체";
   @override
   void initState() {
     super.initState();
@@ -259,19 +262,32 @@ class _MainViewState extends ConsumerState<MainView> {
               color: Colors.white,
               child: Column(
                 children: [
+                  Container(
+                    child: Image(
+                      image: AssetImage('assets/icons/gomin_horizon.png'),
+                      width: 100,
+                      height: 30,
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    thickness: 1,
+                    height: 1,
+                  ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
-                  Text(
-                    "오늘의 고민 공개 전까지",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    formatDuration(_remainingTime),
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFA743E),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: CategorySelector(
+                      initialCategory: "친구",
+                      onSelected: (category) {
+                        setState(() {
+                          selectedCategory = category;
+                        });
+                        // 선택된 카테고리 처리
+                        print("선택된 카테고리: $category");
+                      },
                     ),
                   ),
                   SizedBox(
@@ -283,81 +299,111 @@ class _MainViewState extends ConsumerState<MainView> {
             // ✅ 게시글 목록
             Expanded(
               child: Scrollbar(
-                thumbVisibility: false, // 🔥 스크롤 시에만 스크롤바 보이게 설정
+                thumbVisibility: false,
                 child: postAsync.when(
-                  data: (posts) => ListView.separated(
-                    itemCount: posts.length,
-                    separatorBuilder: (context, index) =>
-                        const Divider(color: Colors.grey),
-                    itemBuilder: (context, index) {
-                      final post = posts[index];
-                      final solutionDetailsAsync =
-                          ref.watch(fetchDetailProvider(post.id));
-                      final info = solutionDetailsAsync.value;
+                  data: (posts) {
+                    final filteredPosts = selectedCategory == "전체"
+                        ? posts
+                        : posts
+                            .where((post) => post.category == selectedCategory)
+                            .toList();
 
-                      return GestureDetector(
-                        onTap: () {
-                          context.push('/details', extra: post.id);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // ✅ 게시글 제목
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25.0),
-                                child: Text(
-                                  post.title,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold,
+                    return ListView.separated(
+                      itemCount: filteredPosts.length,
+                      separatorBuilder: (context, index) =>
+                          const Divider(color: Colors.grey),
+                      itemBuilder: (context, index) {
+                        final post = filteredPosts[index];
+                        final solutionDetailsAsync =
+                            ref.watch(fetchDetailProvider(post.id));
+                        final info = solutionDetailsAsync.value;
+
+                        return GestureDetector(
+                          onTap: () {
+                            context.push('/details', extra: post.id);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // ✅ 🔥 카테고리 라벨 추가
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      post.category,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 8.0),
+                                const SizedBox(height: 6),
+                                // ✅ 게시글 제목
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Text(
+                                    post.title,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8.0),
 
-                              // ✅ 선택지 버튼
-                              if (info != null)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .start, // ✅ 선택지가 왼쪽 정렬되도록 수정
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20.0),
-                                      child: SizedBox(
+                                // ✅ 선택지 버튼
+                                if (info != null)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: SizedBox(
+                                          width: 177,
+                                          child: SelectionButton(
+                                            postId: post.id,
+                                            label: info.option1Content,
+                                            optionNum: 1,
+                                            voteCount: info.option1Vote,
+                                            votePercentage:
+                                                "${info.option1Vote}%",
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      SizedBox(
                                         width: 177,
                                         child: SelectionButton(
                                           postId: post.id,
-                                          label: info.option1Content,
-                                          optionNum: 1,
-                                          voteCount: info.option1Vote,
+                                          label: info.option2Content,
+                                          optionNum: 2,
+                                          voteCount: info.option2Vote,
                                           votePercentage:
-                                              "${info.option1Vote}%",
+                                              "${info.option2Vote}%",
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 10), // 버튼 간격 유지
-                                    SizedBox(
-                                      width: 177, // ✅ 동일한 크기 설정
-                                      child: SelectionButton(
-                                        postId: post.id,
-                                        label: info.option2Content,
-                                        optionNum: 2,
-                                        voteCount: info.option2Vote,
-                                        votePercentage: "${info.option2Vote}%",
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ],
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    );
+                  },
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
                   error: (error, stackTrace) =>

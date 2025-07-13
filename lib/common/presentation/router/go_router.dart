@@ -74,19 +74,14 @@ final GoRouter router = GoRouter(
 int _getCurrentIndex(String location) {
   if (location == '/home') return 0;
   if (location == '/todayWorry') return 1;
-  if (location == '/normalWorry' || location == '/aiWorry') return 2;
+  if (location == '/normalWorry') return 2;
   if (location == '/pastWorry') return 3;
   if (location == '/myProfile') return 4;
   return 0;
 }
 
 void _onTabSelected(BuildContext context, int index) {
-  if (index == 2) {
-    (context as Element).markNeedsBuild();
-    _showPopupMenu(context);
-  } else {
-    context.go(_getPathFromIndex(index));
-  }
+  context.go(_getPathFromIndex(index));
 }
 
 String _getPathFromIndex(int index) {
@@ -95,6 +90,8 @@ String _getPathFromIndex(int index) {
       return '/home';
     case 1:
       return '/todayWorry';
+    case 2:
+      return '/normalWorry';
     case 3:
       return '/pastWorry';
     case 4:
@@ -103,46 +100,46 @@ String _getPathFromIndex(int index) {
       return '/home';
   }
 }
+// ---------------- AI 고민등록을 포함 시키는 코드입니다.---------------------
+// void _showPopupMenu(BuildContext context) async {
+//   final RenderBox overlay =
+//       Overlay.of(context).context.findRenderObject() as RenderBox;
 
-void _showPopupMenu(BuildContext context) async {
-  final RenderBox overlay =
-      Overlay.of(context).context.findRenderObject() as RenderBox;
-
-  await showMenu<String>(
-    context: context,
-    position: RelativeRect.fromLTRB(
-      overlay.size.width / 2 - 86,
-      overlay.size.height - 220,
-      overlay.size.width / 2 + 86,
-      0,
-    ),
-    elevation: 8.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    color: Colors.white,
-    items: [
-      const PopupMenuItem<String>(
-        value: 'general',
-        child: Center(
-          child: Text('일반 고민 작성',
-              style: TextStyle(fontSize: 16, color: Colors.black)),
-        ),
-      ),
-      const PopupMenuDivider(),
-      const PopupMenuItem<String>(
-        value: 'ai',
-        child: Center(
-          child: Text('AI 고민 작성',
-              style: TextStyle(fontSize: 16, color: Colors.black)),
-        ),
-      ),
-    ],
-  ).then((String? value) {
-    if (value == 'general') {
-      context.go('/normalWorry');
-    } else if (value == 'ai') {
-      context.go('/aiWorry');
-    }
-  });
-}
+//   await showMenu<String>(
+//     context: context,
+//     position: RelativeRect.fromLTRB(
+//       overlay.size.width / 2 - 86,
+//       overlay.size.height - 220,
+//       overlay.size.width / 2 + 86,
+//       0,
+//     ),
+//     elevation: 8.0,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(12),
+//     ),
+//     color: Colors.white,
+//     items: [
+//       const PopupMenuItem<String>(
+//         value: 'general',
+//         child: Center(
+//           child: Text('일반 고민 작성',
+//               style: TextStyle(fontSize: 16, color: Colors.black)),
+//         ),
+//       ),
+//       const PopupMenuDivider(),
+//       const PopupMenuItem<String>(
+//         value: 'ai',
+//         child: Center(
+//           child: Text('AI 고민 작성',
+//               style: TextStyle(fontSize: 16, color: Colors.black)),
+//         ),
+//       ),
+//     ],
+//   ).then((String? value) {
+//     if (value == 'general') {
+//       context.go('/normalWorry');
+//     } else if (value == 'ai') {
+//       context.go('/aiWorry');
+//     }
+//   });
+// }

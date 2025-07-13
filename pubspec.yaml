@@ -1,5 +1,5 @@
 name: gomin_jungdok_mobile
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -32,23 +32,19 @@ dependencies:
     sdk: flutter
   http: ^1.3.0
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  json_serializable: ^6.9.4
-  build_runner: ^2.4.15
+  json_serializable: ^6.7.1
   json_annotation: ^4.9.0
   retrofit: ^4.4.2
   dio: ^5.8.0+1
-  retrofit_generator: ^9.1.9
   flutter_svg: ^2.0.17
   provider: ^6.1.2
   flutter_riverpod: ^2.6.1
   font_awesome_flutter: ^10.8.0
   go_router: ^14.8.0
   keyboard_avoider: ^0.2.0
-  image_picker: ^1.1.2
   lucide_icons: ^0.257.0
   firebase_core: ^3.12.1
   google_sign_in: ^6.3.0
@@ -56,12 +52,14 @@ dependencies:
   kakao_flutter_sdk_user: ^1.9.6
   firebase_auth: ^5.5.1
   sign_in_with_apple: ^6.1.4
-
+  wechat_assets_picker: ^9.5.1
+  photo_manager: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  build_runner: ^2.4.8
+  json_serializable: ^6.9.5
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -74,12 +72,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -89,6 +85,7 @@ flutter:
     - assets/icons/logoTypo.svg
     - assets/icons/로고+타이포.png
     - assets/images/kakaoBar.png
+    - assets/icons/gomin_horizon.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
