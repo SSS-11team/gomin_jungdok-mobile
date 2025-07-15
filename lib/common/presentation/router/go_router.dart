@@ -40,13 +40,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) => AiWorry(),
         ),
         GoRoute(
-          path: '/todayWorry',
+          path: '/PrivateTodayWorry',
           builder: (context, state) => TodayWorryTime(),
         ),
-        // GoRoute(
-        //   path: '/todayWorry',
-        //   builder: (context, state) => TodayWorryListScreens(),
-        // ),
+        GoRoute(
+          path: '/publicTodayWorry',
+          builder: (context, state) => TodayWorryListScreens(),
+        ),
         GoRoute(
           path: '/pastWorry',
           builder: (context, state) => PastWorry(),
@@ -94,7 +94,8 @@ String _getPathFromIndex(int index) {
     case 0:
       return '/home';
     case 1:
-      return '/todayWorry';
+      print(getTodayWorryRouteByTime());
+      return getTodayWorryRouteByTime();
     case 3:
       return '/pastWorry';
     case 4:
@@ -145,4 +146,14 @@ void _showPopupMenu(BuildContext context) async {
       context.go('/aiWorry');
     }
   });
+}
+
+String getTodayWorryRouteByTime() {
+  final now = DateTime.now();
+  final hour = now.hour;
+
+  if (0 < hour && hour < 19) return "/privateTodayWorry";
+  if (19 <= hour && hour < 24) return "/publicTodayWorry";
+
+  return "";
 }
