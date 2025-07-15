@@ -17,7 +17,9 @@ class TodayWorryDetails {
   final List<String>? imageUrls;
 
   @JsonKey(name: 'voteResults')
-  final List<VoteResult> voteResults;
+  final List<VoteResults> voteResults;
+  final int totalVoteCount;
+  final int commentCount;
 
   TodayWorryDetails({
     required this.postId,
@@ -25,6 +27,8 @@ class TodayWorryDetails {
     required this.postDesc,
     this.imageUrls,
     required this.voteResults,
+    required this.totalVoteCount,
+    required this.commentCount
   });
 
   factory TodayWorryDetails.fromJson(Map<String, dynamic> json) =>

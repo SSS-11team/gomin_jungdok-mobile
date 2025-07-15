@@ -15,8 +15,10 @@ TodayWorryDetails _$TodayWorryDetailsFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       voteResults: (json['voteResults'] as List<dynamic>)
-          .map((e) => VoteResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => VoteResults.fromJson(e as Map<String, dynamic>))
           .toList(),
+      totalVoteCount: (json['totalVoteCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TodayWorryDetailsToJson(TodayWorryDetails instance) =>
@@ -26,4 +28,6 @@ Map<String, dynamic> _$TodayWorryDetailsToJson(TodayWorryDetails instance) =>
       'post_desc': instance.postDesc,
       'imageUrls': instance.imageUrls,
       'voteResults': instance.voteResults,
+      'totalVoteCount': instance.totalVoteCount,
+      'commentCount': instance.commentCount,
     };

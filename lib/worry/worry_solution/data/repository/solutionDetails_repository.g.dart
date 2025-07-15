@@ -10,7 +10,7 @@ part of 'solutionDetails_repository.dart';
 
 class _SolutionDetailsRepository implements SolutionDetailsRepository {
   _SolutionDetailsRepository(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://34.47.92.139:8080/api/post';
+    baseUrl ??= 'http://34.64.52.253:3030/api/post';
   }
 
   final Dio _dio;
