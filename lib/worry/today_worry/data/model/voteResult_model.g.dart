@@ -8,7 +8,7 @@ part of 'voteResult_model.dart';
 
 VoteResult _$VoteResultFromJson(Map<String, dynamic> json) => VoteResult(
       option: json['option'] as String,
-      percentage: (json['percentage'] as num).toDouble(),
+      percentage: (json['percentage'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$VoteResultToJson(VoteResult instance) =>

@@ -7,13 +7,17 @@ import 'package:retrofit/retrofit.dart';
 
 part 'todayWorry_repository.g.dart';
 
-@RestApi(baseUrl: "$BASE_URL/api/post/today")
+@RestApi(baseUrl: "http://34.63.52.253:3030/api/post/today")
 abstract class TodayWorryRepository {
   factory TodayWorryRepository(Dio dio, {String baseUrl}) =
       _TodayWorryRepository;
 
   @GET('')
-  Future<List<TodayWorry>> fetchTodayWorryPosts();
+Future<List<TodayWorry>> fetchTodayWorryPosts({
+  @Query('size') int size = 10,       // 기본값 10
+  @Query('last-id') int? lastId,      // 마지막 게시글 id
+});
+
 
   @GET('/{post_id}')
   Future<TodayWorryDetails> fetchTodayWorryDetailsPosts({
