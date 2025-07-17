@@ -15,7 +15,7 @@ class VoteResults {
   });
 
   factory VoteResults.fromJson(Map<String, dynamic> json) =>
-      _$VoteResultFromJson(json);
+      _$VoteResultsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$VoteResultToJson(this);
+  Map<String, dynamic> toJson() => _$VoteResultsToJson(this);
 }

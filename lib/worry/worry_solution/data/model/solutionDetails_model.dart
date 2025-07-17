@@ -1,3 +1,4 @@
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'solutionDetails_model.g.dart';
@@ -19,6 +20,7 @@ class SolutionDetails {
   final int option2Vote;
   final String? option1Percentage;
   final String? option2Percentage;
+  final String? category;
 
   SolutionDetails(
       {required this.isVoted,
@@ -35,7 +37,9 @@ class SolutionDetails {
       required this.option1Vote,
       required this.option2Vote,
       this.option1Percentage,
-      this.option2Percentage});
+      this.option2Percentage,
+      this.category,
+      });
 
   factory SolutionDetails.fromJson(Map<String, dynamic> json) =>
       _$SolutionDetailsFromJson(json);
