@@ -54,6 +54,7 @@ dependencies:
   sign_in_with_apple: ^6.1.4
   wechat_assets_picker: ^9.5.1
   photo_manager: ^3.0.0
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:

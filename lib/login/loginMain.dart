@@ -17,35 +17,17 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
   final GoogleAuthService _googleAuthService = GoogleAuthService();
   final AppleAuthService _appleAuthService = AppleAuthService();
 
-  /// 🔹 카카오 로그인 처리
-  // Future<void> _handleKakaoLogin() async {
-  //   String? nickname = await _kakaoAuthService.loginWithKakao();
-  //   if (nickname != null) {
-  //     setState(() {
-  //       userNickname = nickname;
-  //     });
-
-  //     // ✅ 로그인 성공 시 '/home' 화면으로 이동
-  //     if (mounted) {
-  //       context.go('/home');
-  //     }
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("카카오 로그인 실패")),
-  //     );
-  //   }
-  // }
-  // -> 현재 이 코드는 서버가 켜져있지 않은 상황에서 로그인이 실패하면
-  // ui를 확인할 수 없는 메인 코드이기 때문에 주석처리했음
-  // 아래 코드는 카카오 로그인을 실패하더라도 무조건 넘어가도록 구현
   Future<void> _handleKakaoLogin() async {
     try {
       String? nickname = await _kakaoAuthService.loginWithKakao();
+
       if (nickname != null && mounted) {
         setState(() {
           userNickname = nickname;
         });
         print("✅ 로그인 성공: $nickname");
+
+        context.go('/home'); // ✅ 로그인 성공한 경우에만 홈으로 이동
       } else {
         print("❌ 로그인 실패: 사용자 정보 없음");
         if (mounted) {
@@ -58,12 +40,8 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
       print("❌ 로그인 중 오류 발생: $error");
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("로그인 중 오류가 발생했습니다.")),
+          const SnackBar(content: Text("카카오 로그인 중 오류가 발생했습니다.")),
         );
-      }
-    } finally {
-      if (mounted) {
-        context.go('/home');
       }
     }
   }
@@ -76,14 +54,21 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
           userNickname = googleNickname;
         });
         print("✅ 구글 로그인 성공: $googleNickname");
+        context.go('/home');
       } else {
         print("❌ 구글 로그인 실패: 사용자 정보 없음");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("구글 로그인 실패")),
+          );
+        }
       }
     } catch (error) {
-      print("❌ 구글 로그인 중 오류 발생: $error");
-    } finally {
+      print("❌ 애플 로그인 중 오류 발생: $error");
       if (mounted) {
-        context.go('/home');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("구글 로그인 도중 오류가 발생했습니다.")),
+        );
       }
     }
   }
@@ -96,14 +81,21 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
           userNickname = appleNickname;
         });
         print("✅ 애플 로그인 성공: $appleNickname");
+        context.go('/home');
       } else {
         print("❌ 애플 로그인 실패: 사용자 정보 없음");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("애플 로그인 실패")),
+          );
+        }
       }
     } catch (error) {
       print("❌ 애플 로그인 중 오류 발생: $error");
-    } finally {
       if (mounted) {
-        context.go('/home');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("애플 로그인 도중 오류가 발생했습니다.")),
+        );
       }
     }
   }
@@ -213,20 +205,6 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // 🔹 로그아웃 버튼 (나중에 마이페이지에서 활용할 수 있도록)
-            // ElevatedButton(
-            //   onPressed: _handleLogout,
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: Colors.red,
-            //     padding:
-            //         const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-            //   ),
-            //   child: const Text(
-            //     "로그아웃",
-            //     style: TextStyle(color: Colors.white, fontSize: 16),
-            //   ),
-            // ),
           ],
         ),
       ),
