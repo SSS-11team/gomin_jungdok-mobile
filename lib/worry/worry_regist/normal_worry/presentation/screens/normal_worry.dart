@@ -31,7 +31,14 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
   final List<XFile> _selectedImages = [];
 
-  final Dio _dio = Dio();
+  final Dio _dio = Dio(
+    BaseOptions(
+    connectTimeout: const Duration(seconds: 10),  // 서버 연결 제한 시간
+    receiveTimeout: const Duration(seconds: 15),  // 응답 수신 제한 시간
+    sendTimeout: const Duration(seconds: 10),     // 데이터 업로드 제한 시간
+    contentType: 'multipart/form-data',           // (선택) 기본 contentType 설정도 가능
+  ),
+  );
   static const String apiUrl = BASE_URL;
 
   @override
@@ -79,7 +86,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -114,6 +121,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () async {
+                    //print("✅ 버튼 눌림!");
                     await _submitWorry();
                     router.go('/home');
                   },
@@ -126,6 +134,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                   ),
                   child: const Center(child: Text('등록하기')),
                 ),
+                const SizedBox(height: 50),
               ],
             ),
           ),
@@ -137,10 +146,16 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   Future<void> _submitWorry() async {
     FocusScope.of(context).unfocus();
 
+    print("📝 _submitWorry 실행됨");
+
     if (_titleController.text.trim().isEmpty ||
         _introController.text.trim().isEmpty ||
         _choiceControllers[0].text.trim().isEmpty ||
         _choiceControllers[1].text.trim().isEmpty) {
+      print("❗️필수 입력값 누락됨");
+
+      if (!mounted) return;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("제목, 설명, 선택지를 모두 입력해주세요.")),
       );
@@ -173,6 +188,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
       );
 
       if (response.statusCode == 201) {
+        print("🎉 등록 성공 → 페이지 이동 시작");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("고민글 작성 완료! 🎉")),
         );
@@ -191,6 +207,9 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
         debugPrint("❌ 응답 데이터: ${e.response?.data}");
         debugPrint("❌ DioException 메시지: ${e.message}");
       }
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("오류 발생: ${e.toString()}")),
       );
@@ -209,8 +228,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   }
 
   Widget _buildChoiceField(String label, int index) {
-    return IntrinsicHeight(
-      child: Column(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
@@ -236,7 +254,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                 decoration: InputDecoration(
                   counterText: "", // 기본 counter 숨김
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 10),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
@@ -265,7 +283,6 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
             ],
           ),
         ],
-      ),
-    );
+      );
   }
 }

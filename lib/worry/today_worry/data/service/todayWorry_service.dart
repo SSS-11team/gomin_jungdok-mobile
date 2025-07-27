@@ -7,9 +7,10 @@ class TodayWorryService {
 
   TodayWorryService(this.repository);
 
-  Future<List<TodayWorry>> fetchTodayWorryPosts() async {
-    return await repository.fetchTodayWorryPosts();
-  }
+  Future<List<TodayWorry>> fetchTodayWorryPosts({int size = 10, int? lastId}) {
+  return repository.fetchTodayWorryPosts(size: size, lastId: lastId);
+}
+
 
   Future<TodayWorryDetails> fetchTodayWorryDetailsPost(int postId) async {
     return await repository.fetchTodayWorryDetailsPosts(id: postId);

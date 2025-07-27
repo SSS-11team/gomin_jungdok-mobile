@@ -26,7 +26,7 @@ class TodayWorryListScreens extends ConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          TodayWorryDetailsScreen(postId: post.postId),
+                          TodayWorryDetailsScreen(postId: post.id),
                     ),
                   );
                 },

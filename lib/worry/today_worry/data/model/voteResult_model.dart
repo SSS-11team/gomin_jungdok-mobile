@@ -5,7 +5,7 @@ part 'voteResult_model.g.dart';
 @JsonSerializable()
 class VoteResult {
   final String option;
-  final double percentage;
+  final double? percentage;
 
   VoteResult({
     required this.option,

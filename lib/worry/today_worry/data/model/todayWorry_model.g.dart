@@ -7,16 +7,24 @@ part of 'todayWorry_model.dart';
 // **************************************************************************
 
 TodayWorry _$TodayWorryFromJson(Map<String, dynamic> json) => TodayWorry(
-      postId: (json['postId'] as num).toInt(),
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
+      option1Content: json['option1Content'] as String,
+      option2Content: json['option2Content'] as String,
+      option1Vote: (json['option1Vote'] as num).toInt(),
+      option2Vote: (json['option2Vote'] as num).toInt(),
       description: json['description'] as String,
       voteCount: (json['voteCount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TodayWorryToJson(TodayWorry instance) =>
     <String, dynamic>{
-      'postId': instance.postId,
+      'id': instance.id,
       'title': instance.title,
+      'option1Content': instance.option1Content,
+      'option2Content': instance.option2Content,
+      'option1Vote': instance.option1Vote,
+      'option2Vote': instance.option2Vote,
       'description': instance.description,
       'voteCount': instance.voteCount,
     };

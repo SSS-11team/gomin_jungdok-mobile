@@ -13,7 +13,11 @@ abstract class TodayWorryRepository {
       _TodayWorryRepository;
 
   @GET('')
-  Future<List<TodayWorry>> fetchTodayWorryPosts();
+Future<List<TodayWorry>> fetchTodayWorryPosts({
+  @Query('size') int size = 10,       // 기본값 10
+  @Query('last-id') int? lastId,      // 마지막 게시글 id
+});
+
 
   @GET('/{post_id}')
   Future<TodayWorryDetails> fetchTodayWorryDetailsPosts({

@@ -10,7 +10,7 @@ part of 'todayWorry_repository.dart';
 
 class _TodayWorryRepository implements TodayWorryRepository {
   _TodayWorryRepository(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://34.47.92.139:8080/api/post/today';
+    baseUrl ??= 'http://34.63.52.253:3030/api/post/today';
   }
 
   final Dio _dio;
@@ -20,9 +20,16 @@ class _TodayWorryRepository implements TodayWorryRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<TodayWorry>> fetchTodayWorryPosts() async {
+  Future<List<TodayWorry>> fetchTodayWorryPosts({
+    int size = 10,
+    int? lastId,
+  }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'size': size,
+      r'last-id': lastId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<TodayWorry>>(
