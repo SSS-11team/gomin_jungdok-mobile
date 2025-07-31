@@ -40,3 +40,43 @@ final fetchTodayWorryDetailsPostProvider =
     rethrow;
   }
 });
+
+
+
+final todayWorryPaginationProvider =
+    StateNotifierProvider<TodayWorryPaginationNotifier, List<TodayWorry>>(
+  (ref) => TodayWorryPaginationNotifier(ref),
+);
+
+class TodayWorryPaginationNotifier extends StateNotifier<List<TodayWorry>> {
+  final Ref _ref;
+
+  TodayWorryPaginationNotifier(this._ref) : super([]) {
+    fetchMore(); // 최초 1회 데이터 요청
+  }
+
+  bool _isLoading = false;
+  bool _hasMore = true;
+
+  Future<void> fetchMore() async {
+    if (_isLoading || !_hasMore) return;
+
+    _isLoading = true;
+    final lastId = state.isNotEmpty ? state.last.id : null;
+
+    try {
+      final newItems = await _ref.read(todayWorryServiceProvider)
+          .fetchTodayWorryPosts(size: 10, lastId: lastId); // ✅ ref.read 사용
+      if (newItems.isEmpty) {
+        _hasMore = false;
+      } else {
+        state = [...state, ...newItems];
+      }
+    } catch (e) {
+      debugPrint('[ERROR] Pagination fetchMore: $e');
+    } finally {
+      _isLoading = false;
+    }
+  }
+}
+

@@ -13,12 +13,17 @@ class TodayWorryListScreens extends ConsumerStatefulWidget {
 }
 
 class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
+
+  late final ScrollController _scrollController;
+
   late Timer _timer;
   Duration _remainingTime = Duration.zero;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     _calculateRemainingTime();
     _startTimer();
   }
@@ -40,8 +45,18 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
   @override
   void dispose() {
     _timer.cancel();
+    _scrollController.dispose();
     super.dispose();
   }
+
+  void _onScroll() {
+  if (_scrollController.position.pixels >=
+      _scrollController.position.maxScrollExtent - 300) {
+    // 스크롤이 거의 끝에 닿았을 때 추가 데이터 요청
+    ref.read(todayWorryPaginationProvider.notifier).fetchMore();
+    }
+  }
+
 
   String formatDuration(Duration duration) {
     int hours = duration.inHours;
@@ -52,7 +67,7 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
 
   @override
   Widget build(BuildContext context) {
-    final todayWorryPosts = ref.watch(fetchTodayWorryPostsProvider);
+    final todayWorryList = ref.watch(todayWorryPaginationProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -82,23 +97,23 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
               ),
             ),
             Expanded(
-              child: todayWorryPosts.when(
-                data: (todayWorryList) {
-                  return Scrollbar(
-                    thumbVisibility: false,
-                    child: ListView.separated(
+              child: ListView.builder(
+                controller: _scrollController,
                       itemCount: todayWorryList.length,
-                      separatorBuilder: (context, index) =>
-                          const Divider(color: Colors.grey),
                       itemBuilder: (context, index) {
                         final post = todayWorryList[index];
+
+                        final label = index < todayStringList.length
+                        ? todayStringList[index]
+                        : '${index + 1}';
+
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => TodayWorryDetailsScreen(
-                                    postId: post.postId),
+                                    postId: post.id),
                               ),
                             );
                           },
@@ -135,7 +150,7 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
                                               BorderRadius.circular(8),
                                         ),
                                         child: Text(
-                                          '오늘의 고민 ${todayStringList[index]..toString()}번째',
+                                          '오늘의 고민 ${todayStringList[index].toString()}번째',
                                           style: const TextStyle(
                                             fontSize: 16,
                                             color: MAIN_COLOR,
@@ -161,7 +176,7 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
                                                 BorderRadius.circular(8),
                                           ),
                                           child: Center(
-                                              child: Text('1',
+                                              child: Text(post.option1Content,
                                                   style:
                                                       TextStyle(fontSize: 20))),
                                         ),
@@ -177,10 +192,7 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
                                                 BorderRadius.circular(8),
                                           ),
                                           child: Center(
-                                              child: Text(
-                                            '2',
-                                            style: TextStyle(fontSize: 20),
-                                          )),
+                                              child: Text(post.option2Content, style: TextStyle(fontSize: 20))),
                                         ),
                                       ),
                                     ],
@@ -192,18 +204,11 @@ class _TodayWorryListScreensState extends ConsumerState<TodayWorryListScreens> {
                         );
                       },
                     ),
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) =>
-                    const Center(child: Text("데이터를 불러오지 못했습니다.")),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                  )
+                ]
+              )
+            )
+          );
   }
 }
-
-List<String> todayStringList = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟'];
+const List<String> todayStringList = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟', '아홉', '열'];

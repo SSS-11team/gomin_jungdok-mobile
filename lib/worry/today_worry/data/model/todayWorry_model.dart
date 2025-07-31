@@ -5,8 +5,12 @@ part 'todayWorry_model.g.dart';
 
 @JsonSerializable()
 class TodayWorry {
-  final int postId;
+  final int id;
   final String title;
+  final String option1Content;
+  final String option2Content;
+  final int option1Vote;
+  final int option2Vote;
   final String description;
   final String category;
   final VoteResults voteResults;
@@ -14,8 +18,12 @@ class TodayWorry {
   final int commentCount;
 
   TodayWorry({
-    required this.postId,
+    required this.id,
     required this.title,
+    required this.option1Content,
+    required this.option2Content,
+    required this.option1Vote,
+    required this.option2Vote,
     required this.description,
     required this.category,
     required this.voteResults,
