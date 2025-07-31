@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/screens/splash_screen.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/widgets/navigation_bar.dart';
 import 'package:gomin_jungdok_mobile/profile/presentation/screens/myProfile.dart';
+import 'package:gomin_jungdok_mobile/profile/presentation/screens/agreement_screen.dart';
 import 'package:gomin_jungdok_mobile/worry/past_worry/presentation/screens/pastWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryList_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryTime_screens.dart';
@@ -65,6 +66,10 @@ final GoRouter router = GoRouter(
             final postId = state.extra as int;
             return SolutionDetailsView(postId: postId);
           },
+        ),
+        GoRoute(
+          path: '/terms',
+          builder: (context, state) => AgreementScreen(),
         ),
       ],
     ),

@@ -15,7 +15,7 @@ class MyProfile extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              context.go('/');
+              context.go('/'); // Todo : backarrow로 구현
             },
           ),
         ),
@@ -42,7 +42,7 @@ class MyProfile extends StatelessWidget {
                   _buildTextButton(context, Icons.notifications, '알림 설정', '/'),
                   _buildTextButton(context, Icons.assignment, '공지사항', '/'),
                   _buildTextButton(
-                      context, Icons.person_outline, '개인정보 수집 및 이용', '/'),
+                      context, Icons.person_outline, '약관 정보', '/terms'),
                   _buildTextButton(context, Icons.lock, '비밀번호 변경', '/'),
                   _buildTextButton(context, Icons.update, '버전 정보', '/'),
                   _buildTextButton(context, Icons.exit_to_app, '로그아웃', '/'),
