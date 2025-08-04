@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomin_jungdok_mobile/common/const/colors.dart';
 import 'package:gomin_jungdok_mobile/profile/data/static/agreement_text.dart';
 
 class AgreementScreen extends StatefulWidget {
@@ -12,7 +13,10 @@ class _AgreementScreenState extends State<AgreementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('약관 동의')),
+      appBar: AppBar(
+        title: const Text('약관 동의'),
+        backgroundColor: MAIN_BG_COLOR,
+      ),
       body: ListView(
         children: agreementList.entries.map((entry) {
           return Padding(
@@ -37,6 +41,7 @@ class _AgreementScreenState extends State<AgreementScreen> {
           );
         }).toList(),
       ),
+      backgroundColor: MAIN_BG_COLOR,
     );
   }
 }

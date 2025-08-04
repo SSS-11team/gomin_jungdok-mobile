@@ -83,6 +83,8 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/icons/logoTypo.svg
+    - assets/icons/logo.svg
+    - assets/icons/typo.svg
     - assets/launcher_icon/logoTypo.png
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

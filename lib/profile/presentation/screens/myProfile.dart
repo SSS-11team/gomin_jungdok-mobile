@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gomin_jungdok_mobile/common/const/colors.dart';
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
@@ -12,41 +14,141 @@ class MyProfile extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              context.go('/'); // Todo : backarrow로 구현
-            },
+          automaticallyImplyLeading: false, // 뒤로가기 버튼 제거
+          title: Container(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/logo.svg',
+                  height: 50,
+                ),
+                SvgPicture.asset(
+                  'assets/icons/typo.svg',
+                  height: 90,
+                ),
+              ],
+            ),
           ),
         ),
         body: Column(
           children: [
             Divider(
-              thickness: 1,
-              color: Colors.grey, // 검은색 라인
-              indent: 10,
-              endIndent: 10,
+              thickness: 3,
+              color: Colors.grey.shade300,
             ),
-            SizedBox(
-              height: 20,
+
+            // 프로필 섹션 추가
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  // 프로필 이미지
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  // 프로필 정보
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 프로필 이름 추후 수정 필요
+                        Text(
+                          '주현지',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        // 프로필 수정 버튼
+                        GestureDetector(
+                          onTap: () {
+                            // 프로필 수정 페이지로 이동
+                            context.go('/profile/edit');
+                          },
+                          child: Container(
+                            width: double.infinity, // 끝까지 늘리기
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(
+                                  255, 255, 209, 191), // 연한 주황색
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: MAIN_COLOR, // 더 진한 주황색
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              '프로필 수정',
+                              textAlign: TextAlign.center, // 텍스트 중앙 정렬
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(
-              width: 150,
-              height: 150,
-              child: Image.asset('assets/launcher_icon/logoTypo.png'),
+            Divider(
+              thickness: 3,
+              color: Colors.grey.shade300,
             ),
-            SizedBox(height: 40),
+
             Expanded(
               child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
                 children: [
-                  _buildTextButton(context, Icons.notifications, '알림 설정', '/'),
-                  _buildTextButton(context, Icons.assignment, '공지사항', '/'),
-                  _buildTextButton(
-                      context, Icons.person_outline, '약관 정보', '/terms'),
-                  _buildTextButton(context, Icons.lock, '비밀번호 변경', '/'),
-                  _buildTextButton(context, Icons.update, '버전 정보', '/'),
-                  _buildTextButton(context, Icons.exit_to_app, '로그아웃', '/'),
-                  _buildTextButton(context, Icons.delete_forever, '탈퇴하기', '/'),
+                  _buildTextButton(context, '내가 쓴 글 보기', '/'),
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey.shade300,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  _buildTextButton(context, '알림 설정', '/'),
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey.shade300,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  _buildTextButton(context, '로그아웃', '/'),
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey.shade300,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  _buildTextButton(context, '약관 정보', '/terms'),
+                  Divider(
+                    thickness: 1,
+                    color: Colors.grey.shade300,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  _buildTextButton(context, '탈퇴하기', '/'),
                 ],
               ),
             ),
@@ -56,25 +158,29 @@ class MyProfile extends StatelessWidget {
     );
   }
 
-  Widget _buildTextButton(
-      BuildContext context, IconData icon, String title, String route) {
+  Widget _buildTextButton(BuildContext context, String title, String route) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 13.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: GestureDetector(
         onTap: () {
           context.go(route); // 전달받은 라우트로 이동
         },
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(icon, color: Color.fromARGB(255, 252, 133, 86)), // 🔥 아이콘 추가
-            const SizedBox(width: 10), // 🔥 아이콘과 텍스트 간격 조정
             Text(
               title,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
                 color: Colors.grey.shade700,
               ),
             ),
+            IconButton(
+                onPressed: () {
+                  context.go(route);
+                },
+                icon: Icon(Icons.chevron_right))
           ],
         ),
       ),
