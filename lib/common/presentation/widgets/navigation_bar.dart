@@ -39,10 +39,10 @@ class Navigation_bar extends StatelessWidget {
           icon: Icon(Icons.add),
           label: '고민등록하기',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(LucideIcons.bookOpen),
-          label: '과거의고민',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(LucideIcons.bookOpen),
+        //   label: '과거의고민',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: '마이페이지',

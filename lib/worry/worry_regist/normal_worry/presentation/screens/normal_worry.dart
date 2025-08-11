@@ -19,6 +19,9 @@ class NormalWorry extends ConsumerStatefulWidget {
 }
 
 class _NormalWorryState extends ConsumerState<NormalWorry> {
+
+  bool _isPublic = true; // 기본값: 공개
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _introController = TextEditingController();
   int _focusedChoiceIndex = -1;
@@ -84,19 +87,30 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white,
+        systemNavigationBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => context.pop(),
           ),
         ),
-        body: GestureDetector(
+        body: SafeArea(
+        child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(30.0),
@@ -109,6 +123,25 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                 ImagePickerWidget(
                   selectedImages: _selectedImages,
                   onImageSelected: _updateImages,
+                ),
+                const SizedBox(height: 15), // 약간 간격 주고
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '이 고민을 다른 사람에게 공개할까요?',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    Switch(
+                      value: _isPublic,
+                      onChanged: (value) {
+                        setState(() {
+                          _isPublic = value;
+                        });
+                      },
+                      activeColor: Color(0xFFFA743E),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 25),
                 Row(
@@ -140,7 +173,9 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
           ),
         ),
       ),
+    )
     );
+  
   }
 
   Future<void> _submitWorry() async {
@@ -162,6 +197,14 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
       return;
     }
 
+    // 이미지 필수 검사 추가
+    if (_selectedImages.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("최소 1장의 이미지를 선택해주세요.")),
+    );
+    return;
+  }
+
     try {
       List<MapEntry<String, MultipartFile>> imageFiles = [];
       for (var image in _selectedImages) {
@@ -175,6 +218,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
         "description": _introController.text.trim(),
         "option1": _choiceControllers[0].text.trim(),
         "option2": _choiceControllers[1].text.trim(),
+        "isPublic": _isPublic.toString(),
       });
 
       if (imageFiles.isNotEmpty) {

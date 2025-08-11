@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
+
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              context.go('/');
-            },
+Widget build(BuildContext context) {
+  return AnnotatedRegion<SystemUiOverlayStyle>(
+    value: SystemUiOverlayStyle.dark.copyWith(
+      statusBarIconBrightness: Brightness.dark,
+    ),
+    child: SafeArea(
+      top: false, // ✅ 상태바까지 내가 직접 덮을 수 있도록 설정
+      child: Column(
+        children: [
+          // 상태바 높이만큼 흰색으로 덮기
+          Container(
+            height: MediaQuery.of(context).padding.top,
+            color: Colors.white,
           ),
+          Expanded(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+                  statusBarIconBrightness: Brightness.dark,
+                ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            context.go('/');
+          },
         ),
+      ),
         body: Column(
           children: [
             Divider(
@@ -53,6 +72,10 @@ class MyProfile extends StatelessWidget {
           ],
         ),
       ),
+          ),
+        ],
+    ),
+    ),
     );
   }
 

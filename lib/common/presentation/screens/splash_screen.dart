@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/colors.dart';
+import 'package:flutter/services.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,23 +28,32 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: MAIN_COLOR,
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(height: size.width * 0.55),
-              SvgPicture.asset(
-                'assets/icons/logoTypo.svg',
-                height: size.width * 0.5,
-                colorFilter:
-                    const ColorFilter.mode(MAIN_BG_COLOR, BlendMode.srcIn),
-              ),
-            ],
-          ),
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+    value: SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: MAIN_COLOR, // 🔸 상태바 배경색
+      statusBarIconBrightness: Brightness.light, // 상태바 아이콘 흰색
+      systemNavigationBarColor: MAIN_COLOR, // 🔸 네비게이션 바 배경색
+      systemNavigationBarIconBrightness: Brightness.light, // 네비게이션 아이콘 흰색
+    ),
+    child: Scaffold(
+      backgroundColor: MAIN_COLOR,
+      body: SafeArea(
+      child: Center(
+        child: Column(
+          children: [
+            SizedBox(height: size.width * 0.55),
+            SvgPicture.asset(
+              'assets/icons/logoTypo.svg',
+              height: size.width * 0.5,
+              colorFilter:
+                  const ColorFilter.mode(MAIN_BG_COLOR, BlendMode.srcIn),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 }
