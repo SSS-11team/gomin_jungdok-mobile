@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
-
 class AiWorry extends StatefulWidget {
   const AiWorry({super.key});
 
@@ -16,17 +14,17 @@ class _AiWorryState extends State<AiWorry> {
   File? _selectedImage; // 선택한 이미지 파일
 
   // 📌 이미지 선택 함수 (카메라 or 갤러리)
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
+  // Future<void> _pickImage(ImageSource source) async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: source);
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-    Navigator.pop(context); // 모달 닫기
-  }
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _selectedImage = File(pickedFile.path);
+  //     });
+  //   }
+  //   Navigator.pop(context); // 모달 닫기
+  // }
 
   // 📌 사진 추가 모달 (카메라 or 갤러리 선택)
   void _showImagePickerOptions() {
@@ -43,12 +41,12 @@ class _AiWorryState extends State<AiWorry> {
               ListTile(
                 leading: const Icon(Icons.camera_alt),
                 title: const Text("카메라로 찍기"),
-                onTap: () => _pickImage(ImageSource.camera),
+                // onTap: () => _pickImage(ImageSource.camera),
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text("갤러리에서 선택"),
-                onTap: () => _pickImage(ImageSource.gallery),
+                // onTap: () => _pickImage(ImageSource.gallery),
               ),
             ],
           ),

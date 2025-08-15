@@ -35,6 +35,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+         <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="7bb444465d0bd5fcca709aea73c260d1" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -46,5 +49,9 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+    </queries>
+    <queries>
+        <package android:name="com.kakao.talk" />
+        <package android:name="com.kakao.sdk" />
     </queries>
 </manifest>
