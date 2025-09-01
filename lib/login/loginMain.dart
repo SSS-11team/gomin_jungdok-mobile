@@ -125,7 +125,7 @@ class _LoginMainScreenState extends State<LoginMainScreen> {
               height: 100,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/icons/로고+타이포.png"),
+                      image: AssetImage("assets/launcher_icon/logoTypo.png"),
                       fit: BoxFit.cover //이미지가 appbar를 채울 수 있도록 설정
                       )),
             ),

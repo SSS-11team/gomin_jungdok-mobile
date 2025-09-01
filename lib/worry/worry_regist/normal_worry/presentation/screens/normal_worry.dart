@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/const/api.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/router/go_router.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_regist/component/widgets/tooltip_screen.dart';
-import 'package:gomin_jungdok_mobile/worry/worry_regist/normal_worry/presentation/widgets/customTitleField.dart';
 import 'package:gomin_jungdok_mobile/worry/worry_solution/presentation/screens/mainSolution_screens.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
@@ -27,28 +27,23 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
     TextEditingController(),
     TextEditingController(),
   ];
-
   final List<FocusNode> _choiceFocusNodes = [FocusNode(), FocusNode()];
   List<AssetEntity> _selectedImages = [];
 // final ImagePicker _picker = ImagePicker();
 
-  final Dio _dio = Dio(
-    BaseOptions(
-    connectTimeout: const Duration(seconds: 10),  // 서버 연결 제한 시간
-    receiveTimeout: const Duration(seconds: 15),  // 응답 수신 제한 시간
-    sendTimeout: const Duration(seconds: 10),     // 데이터 업로드 제한 시간
-    contentType: 'multipart/form-data',           // (선택) 기본 contentType 설정도 가능
-  ),
-  );
-  static const String apiUrl = BASE_URL;
+  final Dio _dio = Dio(); // 서버와의 통신을 위함!
+  final String apiUrl = BASE_URL;
 
   @override
   void initState() {
     super.initState();
-    _introController.addListener(() => setState(() {}));
-
+    _introController.addListener(() {
+      setState(() {});
+    });
     for (var i = 0; i < _choiceControllers.length; i++) {
-      _choiceControllers[i].addListener(() => setState(() {}));
+      _choiceControllers[i].addListener(() {
+        setState(() {});
+      });
       _choiceFocusNodes[i].addListener(() {
         setState(() {
           _focusedChoiceIndex = _choiceFocusNodes[i].hasFocus ? i : -1;
@@ -59,13 +54,13 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
 
   void _updateImages(List<AssetEntity> newImages) {
     setState(() {
-      _selectedImages.addAll(newImages.take(4 - _selectedImages.length));
+      _selectedImages.clear();
+      _selectedImages.addAll(newImages);
     });
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
     _introController.dispose();
     for (var controller in _choiceControllers) {
       controller.dispose();
@@ -80,14 +75,17 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
+        // 선택지를 눌렀을때 appbar의 색상이 변하는
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              context.pop();
+            },
           ),
         ),
         body: Stack(
@@ -101,7 +99,6 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
               child: GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: SingleChildScrollView(
-                  child: const Center(child: Text('등록하기')),
                   child: Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Column(
@@ -160,10 +157,9 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -180,10 +176,6 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
         _introController.text.trim().isEmpty ||
         _choiceControllers[0].text.trim().isEmpty ||
         _choiceControllers[1].text.trim().isEmpty) {
-      print("❗️필수 입력값 누락됨");
-
-      if (!mounted) return;
-      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("제목, 카테고리, 설명, 선택지를 모두 입력해주세요.")),
       );
@@ -215,22 +207,29 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
       });
 
       if (imageFiles.isNotEmpty) {
-        formData.files.addAll(imageFiles);
+        formData.files.addAll(
+          (imageFiles),
+        );
       }
 
       Response response = await _dio.post(
         "$apiUrl/api/post",
         data: formData,
-        options: Options(headers: {"Content-Type": "multipart/form-data"}),
+        options: Options(
+          headers: {"Content-Type": "multipart/form-data"},
+        ),
       );
 
+      debugPrint("✅ 응답 코드: ${response.statusCode}");
+      debugPrint("✅ 응답 데이터: ${response.data}");
+
       if (response.statusCode == 201) {
-        print("🎉 등록 성공 → 페이지 이동 시작");
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("고민글 작성 완료! 🎉")),
+          SnackBar(content: Text("고민글 작성 완료! 🎉")),
         );
         ref.invalidate(postProvider);
         router.go('/home');
+        // 입력 필드 초기화
         _clearFields();
       } else {
         throw Exception("고민글 작성 실패: ${response.statusMessage}");
@@ -265,7 +264,8 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
   }
 
   Widget _buildChoiceField(String label, int index) {
-      return Column(
+    return IntrinsicHeight(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
@@ -291,7 +291,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
                 decoration: InputDecoration(
                   counterText: "", // 기본 counter 숨김
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                      EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
@@ -321,7 +321,7 @@ class _NormalWorryState extends ConsumerState<NormalWorry> {
           ),
         ],
       ),
-    )
+    );
   }
 }
 

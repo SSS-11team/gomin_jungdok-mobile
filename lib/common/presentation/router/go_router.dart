@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/screens/splash_screen.dart';
 import 'package:gomin_jungdok_mobile/common/presentation/widgets/navigation_bar.dart';
 import 'package:gomin_jungdok_mobile/login/loginMain.dart';
-import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/past_worry/presentation/screens/pastWorry.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryList_screens.dart';
 import 'package:gomin_jungdok_mobile/worry/today_worry/presentation/screens/todayWorryTime_screens.dart';
@@ -56,10 +55,10 @@ final GoRouter router = GoRouter(
           path: '/pastWorry',
           builder: (context, state) => PastWorry(),
         ),
-        GoRoute(
-          path: '/myProfile',
-          builder: (context, state) => MyProfile(),
-        ),
+        // GoRoute(
+        //   path: '/myProfile',
+        //   builder: (context, state) => MyProfile(),
+        // ),
         GoRoute(
           path: '/aiWorryAnalyze',
           builder: (context, state) => AiAnalyze(),
@@ -108,41 +107,41 @@ String _getPathFromIndex(int index) {
 //   final RenderBox overlay =
 //       Overlay.of(context).context.findRenderObject() as RenderBox;
 
-  await showMenu<String>(
-    context = context,
-    position = RelativeRect.fromLTRB(
-      overlay.size.width / 2 - 86,
-      overlay.size.height - 220,
-      overlay.size.width / 2 + 86,
-      0,
-    ),
-    elevation = 8.0,
-    shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    color = Colors.white,
-    items = [
-      const PopupMenuItem<String>(
-        value: 'general',
-        child: Center(
-          child: Text('일반 고민 작성',
-              style: TextStyle(fontSize: 16, color: Colors.black)),
-        ),
-      ),
-      const PopupMenuDivider(),
-      const PopupMenuItem<String>(
-        value: 'ai',
-        child: Center(
-          child: Text('AI 고민 작성',
-              style: TextStyle(fontSize: 16, color: Colors.black)),
-        ),
-      ),
-    ],
-  ).then((String? value) {
-    if (value == 'general') {
-      context.go('/normalWorry');
-    } else if (value == 'ai') {
-      context.go('/aiWorry');
-    }
-  });
-}
+//   await showMenu<String>(
+//     context = context,
+//     position = RelativeRect.fromLTRB(
+//       overlay.size.width / 2 - 86,
+//       overlay.size.height - 220,
+//       overlay.size.width / 2 + 86,
+//       0,
+//     ),
+//     elevation = 8.0,
+//     shape = RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(12),
+//     ),
+//     color = Colors.white,
+//     items = [
+//       const PopupMenuItem<String>(
+//         value: 'general',
+//         child: Center(
+//           child: Text('일반 고민 작성',
+//               style: TextStyle(fontSize: 16, color: Colors.black)),
+//         ),
+//       ),
+//       const PopupMenuDivider(),
+//       const PopupMenuItem<String>(
+//         value: 'ai',
+//         child: Center(
+//           child: Text('AI 고민 작성',
+//               style: TextStyle(fontSize: 16, color: Colors.black)),
+//         ),
+//       ),
+//     ],
+//   ).then((String? value) {
+//     if (value == 'general') {
+//       context.go('/normalWorry');
+//     } else if (value == 'ai') {
+//       context.go('/aiWorry');
+//     }
+//   });
+// }
