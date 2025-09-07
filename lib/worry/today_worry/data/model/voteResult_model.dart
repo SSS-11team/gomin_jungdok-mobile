@@ -3,17 +3,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'voteResult_model.g.dart';
 
 @JsonSerializable()
-class VoteResult {
+class VoteResults {
   final String option;
-  final double? percentage;
+  final int voteCount;
+  final double percentage;
 
-  VoteResult({
+  VoteResults({
     required this.option,
+    required this.voteCount,
     required this.percentage,
   });
 
-  factory VoteResult.fromJson(Map<String, dynamic> json) =>
-      _$VoteResultFromJson(json);
+  factory VoteResults.fromJson(Map<String, dynamic> json) =>
+      _$VoteResultsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$VoteResultToJson(this);
+  Map<String, dynamic> toJson() => _$VoteResultsToJson(this);
 }

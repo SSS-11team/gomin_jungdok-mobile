@@ -23,6 +23,7 @@ SolutionDetails _$SolutionDetailsFromJson(Map<String, dynamic> json) =>
       option2Vote: (json['option2Vote'] as num).toInt(),
       option1Percentage: json['option1Percentage'] as String?,
       option2Percentage: json['option2Percentage'] as String?,
+      category: json['category'] as String?,
     );
 
 Map<String, dynamic> _$SolutionDetailsToJson(SolutionDetails instance) =>
@@ -42,4 +43,5 @@ Map<String, dynamic> _$SolutionDetailsToJson(SolutionDetails instance) =>
       'option2Vote': instance.option2Vote,
       'option1Percentage': instance.option1Percentage,
       'option2Percentage': instance.option2Percentage,
+      'category': instance.category,
     };

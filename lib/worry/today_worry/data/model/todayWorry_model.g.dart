@@ -14,7 +14,11 @@ TodayWorry _$TodayWorryFromJson(Map<String, dynamic> json) => TodayWorry(
       option1Vote: (json['option1Vote'] as num).toInt(),
       option2Vote: (json['option2Vote'] as num).toInt(),
       description: json['description'] as String,
-      voteCount: (json['voteCount'] as num).toInt(),
+      category: json['category'] as String,
+      voteResults:
+          VoteResults.fromJson(json['voteResults'] as Map<String, dynamic>),
+      totalVoteCount: (json['totalVoteCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TodayWorryToJson(TodayWorry instance) =>
@@ -26,5 +30,8 @@ Map<String, dynamic> _$TodayWorryToJson(TodayWorry instance) =>
       'option1Vote': instance.option1Vote,
       'option2Vote': instance.option2Vote,
       'description': instance.description,
-      'voteCount': instance.voteCount,
+      'category': instance.category,
+      'voteResults': instance.voteResults,
+      'totalVoteCount': instance.totalVoteCount,
+      'commentCount': instance.commentCount,
     };

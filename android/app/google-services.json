@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "816413882542",
+    "project_id": "gominjungdok-16bbd",
+    "storage_bucket": "gominjungdok-16bbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816413882542:android:bb48e5fa7484c63dbfd53f",
+        "android_client_info": {
+          "package_name": "com.example.gomin_jungdok_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816413882542-lrb6cdbputkpdv9hu3f4re4mqmo3l13n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEwrFEZgHWP0tdZ3cOdmzCXK2IuvMhaOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816413882542-lrb6cdbputkpdv9hu3f4re4mqmo3l13n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "816413882542-gc03v2k9bsjv6s2qau3sv9oh1pukjhaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gominJungdokMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
